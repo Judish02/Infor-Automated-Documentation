@@ -1,0 +1,13 @@
+{
+  "customHeaders": [
+    {
+      "objectName": "Acknowledge.REFLEXPreparationCdeCustom",
+      "headers": [
+        {
+          "name": "Custom_fileName",
+          "dataType": "String"
+        }
+      ]
+    }
+  ]
+}

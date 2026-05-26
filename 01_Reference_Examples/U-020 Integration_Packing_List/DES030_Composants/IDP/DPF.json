@@ -1,0 +1,555 @@
+[
+  {
+    "documetFlowID": 708,
+    "documentFlowName": "U-20 Packing Lists",
+    "documentFlowDescription": "",
+    "activities": [
+      {
+        "activityId": 809,
+        "activityTypeId": 2,
+        "activityName": "Entity Classification",
+        "activityDescription": "Entity Classification",
+        "activityProviders": [
+          {
+            "providerId": 10,
+            "providerName": "GenAI",
+            "providerDescription": "GenAI Model",
+            "providerGuid": null
+          }
+        ],
+        "seqNo": 0,
+        "activityProviderId": 10,
+        "status": 0,
+        "activityGuild": "2b30b96d-9df2-4288-b0da-57ba5faeefaf",
+        "configurations": null,
+        "base_model_guid": "",
+        "autoSplit": false,
+        "testCount": 20,
+        "trainCount": 80,
+        "expectedAccuracy": 0,
+        "ephocCount": 0
+      }
+    ],
+    "trainingCount": 0,
+    "testCount": 0,
+    "modelAccuracy": 0,
+    "guidID": "b3fe3e46-6530-4a66-879b-d4da9a1d16a9",
+    "status": "Active",
+    "documentClasses": [
+      {
+        "documentClassGuid": "9ecff5c1-b941-4b32-baf9-d4f7bed0e81f",
+        "documentTypeId": 1113,
+        "documentName": "Packing Lists",
+        "documentFields": [
+          {
+            "fieldName": "Container Number",
+            "description": "",
+            "fieldType": "text",
+            "isRequired": false,
+            "idmattributeName": "None"
+          },
+          {
+            "fieldName": "Supplier Number",
+            "description": "Can also be named supplier code",
+            "fieldType": "text",
+            "isRequired": false,
+            "idmattributeName": "None"
+          }
+        ],
+        "tableHeaders": [
+          {
+            "tableId": 0,
+            "documentClassId": 0,
+            "tableName": "Lignes",
+            "tableFields": [
+              {
+                "fieldId": 7508,
+                "documentClassId": 0,
+                "fieldName": "PI NO",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 7509,
+                "documentClassId": 0,
+                "fieldName": "Item Number",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 7510,
+                "documentClassId": 0,
+                "fieldName": "Total CBM",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 7511,
+                "documentClassId": 0,
+                "fieldName": "Total Gross Weight",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              }
+            ],
+            "isRequired": false,
+            "idmAttributeName": "None",
+            "expectedConfidence": 0,
+            "description": ""
+          }
+        ],
+        "baseModelID": "",
+        "status": null,
+        "idmDocumentType": "",
+        "description": "",
+        "documentClassID": 0
+      }
+    ],
+    "configurationAndPrompt": {
+      "ocrType": null,
+      "dcPrompt": null,
+      "ecPrompt": [
+        {
+          "Packing Lists": "$Entity Classification Prompt Start$User: You are an expert Document-Based Question-Answering tool assigned to extract specified entities from a provided document. Analyze the provided PDF document carefully. The document includes layout details, and the OCR text is provided page by page within <Page {Page Number}> tags. Entities to be detected are marked within <entities></entities> tags. Think step by step and use the clues to consider what information is potentially relevant for an entity.\n\n<entities>\nContainer Number,Supplier Number\n</entities>\n\nClues:\nSupplier Number - Can also be named supplier code\n\n<instructions>\n1. There are 2 entities in <entities></entities> tag, be diligent in ensuring to capture all entities value completely upfront without missing any.\n2. Go through the clues one by one and understand the meaning of each entity type and extract correct values with less false positive.\n3. Avoid calculating any entity value and do not include any other entity outside <entities></entities> tag.\n4. If there are multiple instances of one entity type present in the document, extract all the distinct values with page numbers for that entity type and give them as an array of values. Example: there are multiple \"Invoice Number\" values, include all of them in the output like this: {\"entity\": \"Invoice Number\", \"value\": [\"26\", \"123\", \"456\"], \"confidence\": 100, \"PageNo\":[\"1,2\",\"3,4\",\"5,6\"]}.\n5. Format your output as a JSON object for each type-value pair you extract, in this format: <format> {\"entity\": <entity selected from <entities> list>, \"value\": <value text from input document>, \"confidence\": <confidence in entity match>, \"PageNo\": <Comma separated all page numbers where the entity is present>}</format>\n6. Your response should include text from only document and wrapped in <result></result> tags. Do not include any other explanatory text\n7. If an entity appears on multiple pages, regardless of whether the value is the same or different, list all the corresponding page numbers in the \"PageNo\" field. If the value is the same across pages, the page numbers should be provided as a comma-separated string, e.g., \"1,2,4.\" If the values differ, group the page numbers into lists, e.g., [\"1,2\", \"3,4\", \"2,5\"], corresponding to their respective values, e.g., [\"value1\", \"value2\", \"value3\"].\n</instructions>\n\nReturn the result as JSON:\n<result>\n{\n    \"entities\":\n    [\n        {\"entity\":\"Container Number\",\"value\":\"Container Number Value\", \"confidence\": 87, \"PageNo\":\"1,2,3\"},\n        {\"entity\":\"Supplier Number\",\"value\":\"\", \"confidence\": 82, \"PageNo\":\"1,2,3\"}\n    ]\n}\n</result>\n\n\nBefore giving the response, please make sure you return all entities present in <entities></entities> tag. Provide your final response within <result></result> tags.\n\nExpert:$Entity Classification Prompt End$\n\n$Table Detection Prompt Start$\nUser:\nYou are an expert document-based table extractor assigned to extract tables from provided documents.\nYou are given with the document for layout understanding and the complete OCR of document page by page enclosed in <Page {Page Number}> OCR of Page </Page {Page Number}>\nYour task is to extract the Lignes Table -  from the all pages of provided document referring the Columns List and Clues. You can refer to the provided document only for understanding the layout of the tables.\n\nTables to Extract: [Lignes]\n\nTask:\n1. Analyze the table information thoroughly from the provided OCR text.\n2. Refer to the provided image to understand the layout structure of the tables.\n3. Extract only the tables mentioned in the Tables to Extract section. Organize the extracted tables into a tabular format using only the OCR text provided, while following the layout structure from the image.\n4. Ensure that all columns from the Column List are included and provide appropriate and correct values for those that exist in the document. Exclude any columns listed in the Column List that are not present in the document. If there are any additional columns present inside the table in the original document that have not been accounted for as part of the columns in Columns List, provide these extra columns separately under \"Other\" with their actual column names from the OCR. Provide these only if they are not already accounted for in a column in Columns List. For example if Balance Due is already brought under column Quantity BackOrder, it should not be brought again as \"Other (Balance Due)\". Similary if Extended Price is brought under Subtotal column, \"Other (Extended Price)\" should not be brought again.\n5. Provide the column headers in the output as \"Columnname from Columns List\". For the extra columns, provide each as a separate \"Other\" entry with the format \"Other (Actual column header name as per OCR)\": \"Value\". For example, if the column name from the Columns List is \"Item Number\", then provide the column header as Item Number. If extra columns/additional information is present in the table, for example Batch Number, Delivery Date, they should be provided as separate columns - \"Other (Batch Number)\": \"Value\", \"Other (Delivery Date)\": \"Value\". Do not group these under a single \"Other\" object.\n6. After extracting each table, provide Table Confidence in the format:\n\"{Table_Confidence}\": \"{Table extraction Confidence percentage in the range 0 to 100}\n7. Double check that all the column headers are provided as \"Columnname from Columns List\" and all the extra columns are extracted separately as \"Other\"(Actual column header names as per OCR)\n\nColumns List:\nLignes - [Item Number, PI NO, Total CBM, Total Gross Weight]\n\nClues:\nLignes Table:\nPI NO - \nItem Number - \nTotal CBM - \nTotal Gross Weight - \n\nGuidelines:\n1. Ensure that the table has a proper table name matching with the table in Tables to Extract Section, table column headers, and respective column values under column headers.\n2. For extra columns, provide them separately under \"Other\" with their actual column names from the OCR.\n3. Make sure to omit the columns that are nowhere present in the document ocr.\n4. Do not compute values on your own. Provide only if they are present in the document. For example Totals, Subtotals, Line Numbers.\n\n\n\nOutput Format:\nProvide your response in the following json format. Only provide the json and do not provide any preamble.\nResponse data type definitions:\n{\n  \"Table Name\": {\n    \"headers\": List[str],              # list each element is a list of strings\n    \"rows\": List[Dict[str,str]], # List containing dictionaries with string keys and string values\n    \"Table_Confidence\": str               # A string indicating the confidence level for the entire table\n  }\n}\n\nExamples:\n<result>\n{\n  \"Lignes\": {\n    \"headers\": [\n      \"Item Number\",\n      \"PI NO\",\n      \"Total CBM\",\n      \"Total Gross Weight\",\n      \"PageNo\"\n    ],\n    \"rows\": [\n      {\n        \"Item Number\": \"cellvalue\",\n        \"PI NO\": \"cellvalue\",\n        \"Total CBM\": \"cellvalue\",\n        \"Total Gross Weight\": \"cellvalue\",\n        \"PageNo\": \"1\"\n      }\n    ],\n    \"table_confidence\": \"Confidence of the Table in float\"\n  }\n}\n</result>\n\nGuidelines:\nResponse should not contain any comments and new lines.\nThe table structure should be in above format, with proper table names, column names and column values with Page number under column \"PageNo\".\nStrictly provide the response containing only valid XML in the above provided structure enclosed in <result></result> and do not use code block formatting or any other text formatting. The json inside result tags should be valid and without any error.\nIf no table is present in the document or if the document contains an empty table, the output format should be <result></result>.\n$Table Detection Prompt End$"
+        }
+      ]
+    },
+    "createtime": "2026-01-13T12:54:58",
+    "updatedtime": "2026-01-20T11:36:37.4020905+00:00",
+    "errormsg": "",
+    "dpfVersionId": 708,
+    "versionID": "1",
+    "versionName": "v1",
+    "versionStatus": "InActive",
+    "promptStructure": 0,
+    "is_default": false,
+    "is_base_df": false,
+    "t2vNamespace": "",
+    "t2vNamespaceCode": "",
+    "isImported": 0
+  },
+  {
+    "documetFlowID": 708,
+    "documentFlowName": "U-20 Packing Lists",
+    "documentFlowDescription": "",
+    "activities": [
+      {
+        "activityId": 858,
+        "activityTypeId": 2,
+        "activityName": "Entity Classification",
+        "activityDescription": "Entity Classification",
+        "activityProviders": [
+          {
+            "providerId": 10,
+            "providerName": "GenAI",
+            "providerDescription": "GenAI Model",
+            "providerGuid": null
+          }
+        ],
+        "seqNo": 0,
+        "activityProviderId": 10,
+        "status": 0,
+        "activityGuild": "36c45306-b441-45bd-a861-0334c5d424b5",
+        "configurations": null,
+        "base_model_guid": "",
+        "autoSplit": false,
+        "testCount": 20,
+        "trainCount": 80,
+        "expectedAccuracy": 0,
+        "ephocCount": 0
+      }
+    ],
+    "trainingCount": 0,
+    "testCount": 0,
+    "modelAccuracy": 0,
+    "guidID": "b3fe3e46-6530-4a66-879b-d4da9a1d16a9",
+    "status": "Active",
+    "documentClasses": [
+      {
+        "documentClassGuid": "5530148f-9a89-494d-bdc4-46054799c534",
+        "documentTypeId": 1168,
+        "documentName": "Packing Lists",
+        "documentFields": [
+          {
+            "fieldName": "Container Number",
+            "description": "",
+            "fieldType": "text",
+            "isRequired": false,
+            "idmattributeName": "None"
+          }
+        ],
+        "tableHeaders": [
+          {
+            "tableId": 0,
+            "documentClassId": 0,
+            "tableName": "Lignes",
+            "tableFields": [
+              {
+                "fieldId": 7512,
+                "documentClassId": 0,
+                "fieldName": "PI NO",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 7513,
+                "documentClassId": 0,
+                "fieldName": "Item Number",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 7514,
+                "documentClassId": 0,
+                "fieldName": "Total CBM",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 7515,
+                "documentClassId": 0,
+                "fieldName": "Total Gross Weight",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              }
+            ],
+            "isRequired": false,
+            "idmAttributeName": "None",
+            "expectedConfidence": 0,
+            "description": "Ignore line if Item Number is equal Total"
+          }
+        ],
+        "baseModelID": "",
+        "status": null,
+        "idmDocumentType": "None",
+        "description": "",
+        "documentClassID": 0
+      }
+    ],
+    "configurationAndPrompt": {
+      "ocrType": null,
+      "dcPrompt": null,
+      "ecPrompt": [
+        {
+          "Packing Lists": "$Entity Classification Prompt Start$User: You are an expert Document-Based Question-Answering tool assigned to extract specified entities from a provided document. Analyze the provided PDF document carefully. The document includes layout details, and the OCR text is provided page by page within <Page {Page Number}> tags. Entities to be detected are marked within <entities></entities> tags. Think step by step and use the clues to consider what information is potentially relevant for an entity.\n\n<entities>\nContainer Number,Supplier Number\n</entities>\n\nClues:\nSupplier Number - Can also be named supplier code\n\n<instructions>\n1. There are 2 entities in <entities></entities> tag, be diligent in ensuring to capture all entities value completely upfront without missing any.\n2. Go through the clues one by one and understand the meaning of each entity type and extract correct values with less false positive.\n3. Avoid calculating any entity value and do not include any other entity outside <entities></entities> tag.\n4. If there are multiple instances of one entity type present in the document, extract all the distinct values with page numbers for that entity type and give them as an array of values. Example: there are multiple \"Invoice Number\" values, include all of them in the output like this: {\"entity\": \"Invoice Number\", \"value\": [\"26\", \"123\", \"456\"], \"confidence\": 100, \"PageNo\":[\"1,2\",\"3,4\",\"5,6\"]}.\n5. Format your output as a JSON object for each type-value pair you extract, in this format: <format> {\"entity\": <entity selected from <entities> list>, \"value\": <value text from input document>, \"confidence\": <confidence in entity match>, \"PageNo\": <Comma separated all page numbers where the entity is present>}</format>\n6. Your response should include text from only document and wrapped in <result></result> tags. Do not include any other explanatory text\n7. If an entity appears on multiple pages, regardless of whether the value is the same or different, list all the corresponding page numbers in the \"PageNo\" field. If the value is the same across pages, the page numbers should be provided as a comma-separated string, e.g., \"1,2,4.\" If the values differ, group the page numbers into lists, e.g., [\"1,2\", \"3,4\", \"2,5\"], corresponding to their respective values, e.g., [\"value1\", \"value2\", \"value3\"].\n</instructions>\n\nReturn the result as JSON:\n<result>\n{\n    \"entities\":\n    [\n        {\"entity\":\"Container Number\",\"value\":\"Container Number Value\", \"confidence\": 88, \"PageNo\":\"1,2,3\"},\n        {\"entity\":\"Supplier Number\",\"value\":\"\", \"confidence\": 100, \"PageNo\":\"1,2,3\"}\n    ]\n}\n</result>\n\n\nBefore giving the response, please make sure you return all entities present in <entities></entities> tag. Provide your final response within <result></result> tags.\n\nExpert:$Entity Classification Prompt End$\n\n$Table Detection Prompt Start$\nUser:\nYou are an expert document-based table extractor assigned to extract tables from provided documents.\nYou are given with the document for layout understanding and the complete OCR of document page by page enclosed in <Page {Page Number}> OCR of Page </Page {Page Number}>\nYour task is to extract the Lignes Table - Ignore line if Item Number is equal Total from the all pages of provided document referring the Columns List and Clues. You can refer to the provided document only for understanding the layout of the tables.\n\nTables to Extract: [Lignes]\n\nTask:\n1. Analyze the table information thoroughly from the provided OCR text.\n2. Refer to the provided image to understand the layout structure of the tables.\n3. Extract only the tables mentioned in the Tables to Extract section. Organize the extracted tables into a tabular format using only the OCR text provided, while following the layout structure from the image.\n4. Ensure that all columns from the Column List are included and provide appropriate and correct values for those that exist in the document. Exclude any columns listed in the Column List that are not present in the document. If there are any additional columns present inside the table in the original document that have not been accounted for as part of the columns in Columns List, provide these extra columns separately under \"Other\" with their actual column names from the OCR. Provide these only if they are not already accounted for in a column in Columns List. For example if Balance Due is already brought under column Quantity BackOrder, it should not be brought again as \"Other (Balance Due)\". Similary if Extended Price is brought under Subtotal column, \"Other (Extended Price)\" should not be brought again.\n5. Provide the column headers in the output as \"Columnname from Columns List\". For the extra columns, provide each as a separate \"Other\" entry with the format \"Other (Actual column header name as per OCR)\": \"Value\". For example, if the column name from the Columns List is \"Item Number\", then provide the column header as Item Number. If extra columns/additional information is present in the table, for example Batch Number, Delivery Date, they should be provided as separate columns - \"Other (Batch Number)\": \"Value\", \"Other (Delivery Date)\": \"Value\". Do not group these under a single \"Other\" object.\n6. After extracting each table, provide Table Confidence in the format:\"{Table_Confidence}\": \"{Table extraction Confidence percentage in the range 0 to 100}\n7. Double check that all the column headers are provided as \"Columnname from Columns List\" and all the extra columns are extracted separately as \"Other\"(Actual column header names as per OCR)\n\nColumns List:\nLignes - [Item Number, PI NO, Total CBM, Total Gross Weight]\n\nClues:\nLignes Table:\nPI NO - \nItem Number - \nTotal CBM - \nTotal Gross Weight - \n\nGuidelines:\n1. Ensure that the table has a proper table name matching with the table in Tables to Extract Section, table column headers, and respective column values under column headers.\n2. For extra columns, provide them separately under \"Other\" with their actual column names from the OCR.\n3. Make sure to omit the columns that are nowhere present in the document ocr.\n4. Do not compute values on your own. Provide only if they are present in the document. For example Totals, Subtotals, Line Numbers.\n\n\n\nOutput Format:\nProvide your response in the following json format. Only provide the json and do not provide any preamble.\nResponse data type definitions:\n{\n  \"Table Name\": {\n    \"headers\": List[str],              # list each element is a list of strings\n    \"rows\": List[Dict[str,str]], # List containing dictionaries with string keys and string values\n    \"Table_Confidence\": str               # A string indicating the confidence level for the entire table\n  }\n}\n\nExamples:\n<result>\n{\n  \"Lignes\": {\n    \"headers\": [\n      \"Item Number\",\n      \"PI NO\",\n      \"Total CBM\",\n      \"Total Gross Weight\",\n      \"PageNo\"\n    ],\n    \"rows\": [\n      {\n        \"Item Number\": \"cellvalue\",\n        \"PI NO\": \"cellvalue\",\n        \"Total CBM\": \"cellvalue\",\n        \"Total Gross Weight\": \"cellvalue\",\n        \"PageNo\": \"1\"\n      }\n    ],\n    \"table_confidence\": \"Confidence of the Table in float\"\n  }\n}\n</result>\n\nGuidelines:\nResponse should not contain any comments and new lines.\nThe table structure should be in above format, with proper table names, column names and column values with Page number under column \"PageNo\".\nStrictly provide the response containing only valid XML in the above provided structure enclosed in <result></result> and do not use code block formatting or any other text formatting. The json inside result tags should be valid and without any error.\nIf no table is present in the document or if the document contains an empty table, the output format should be <result></result>.\n$Table Detection Prompt End$"
+        }
+      ]
+    },
+    "createtime": "2026-01-13T12:54:58",
+    "updatedtime": "2026-01-20T11:36:37.4091641+00:00",
+    "errormsg": "",
+    "dpfVersionId": 761,
+    "versionID": "2",
+    "versionName": "v2",
+    "versionStatus": "InActive",
+    "promptStructure": 0,
+    "is_default": false,
+    "is_base_df": false,
+    "t2vNamespace": "",
+    "t2vNamespaceCode": "",
+    "isImported": 0
+  },
+  {
+    "documetFlowID": 708,
+    "documentFlowName": "U-20 Packing Lists",
+    "documentFlowDescription": "",
+    "activities": [
+      {
+        "activityId": 864,
+        "activityTypeId": 2,
+        "activityName": "Entity Classification",
+        "activityDescription": "Entity Classification",
+        "activityProviders": [
+          {
+            "providerId": 10,
+            "providerName": "GenAI",
+            "providerDescription": "GenAI Model",
+            "providerGuid": null
+          }
+        ],
+        "seqNo": 0,
+        "activityProviderId": 10,
+        "status": 0,
+        "activityGuild": "3383f83a-41d3-4771-9bb2-7b0b6baf8c70",
+        "configurations": null,
+        "base_model_guid": "",
+        "autoSplit": false,
+        "testCount": 20,
+        "trainCount": 80,
+        "expectedAccuracy": 0,
+        "ephocCount": 0
+      }
+    ],
+    "trainingCount": 0,
+    "testCount": 0,
+    "modelAccuracy": 0,
+    "guidID": "b3fe3e46-6530-4a66-879b-d4da9a1d16a9",
+    "status": "Active",
+    "documentClasses": [
+      {
+        "documentClassGuid": "ac6a5be4-6b4a-46c1-8839-00f04d7faf68",
+        "documentTypeId": 1174,
+        "documentName": "Packing Lists",
+        "documentFields": [
+          {
+            "fieldName": "Container Number",
+            "description": "",
+            "fieldType": "text",
+            "isRequired": false,
+            "idmattributeName": "None"
+          },
+          {
+            "fieldName": "Supplier Number",
+            "description": "Can also be named Supplier Code",
+            "fieldType": "text",
+            "isRequired": false,
+            "idmattributeName": "None"
+          }
+        ],
+        "tableHeaders": [
+          {
+            "tableId": 0,
+            "documentClassId": 0,
+            "tableName": "Lignes",
+            "tableFields": [
+              {
+                "fieldId": 7516,
+                "documentClassId": 0,
+                "fieldName": "PI NO",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 7517,
+                "documentClassId": 0,
+                "fieldName": "Item Number",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 7518,
+                "documentClassId": 0,
+                "fieldName": "Total CBM",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 7519,
+                "documentClassId": 0,
+                "fieldName": "Total Gross Weight",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              }
+            ],
+            "isRequired": false,
+            "idmAttributeName": "None",
+            "expectedConfidence": 0,
+            "description": "Ignore line if Item Number is equal Total"
+          }
+        ],
+        "baseModelID": "",
+        "status": null,
+        "idmDocumentType": "None",
+        "description": "",
+        "documentClassID": 0
+      }
+    ],
+    "configurationAndPrompt": {
+      "ocrType": null,
+      "dcPrompt": null,
+      "ecPrompt": [
+        {
+          "Packing Lists": "$Entity Classification Prompt Start$User: You are an expert Document-Based Question-Answering tool assigned to extract specified entities from a provided document. Analyze the provided PDF document carefully. The document includes layout details, and the OCR text is provided page by page within <Page {Page Number}> tags. Entities to be detected are marked within <entities></entities> tags. Think step by step and use the clues to consider what information is potentially relevant for an entity.\n\n<entities>\nContainer Number,Supplier Number\n</entities>\n\nClues:\nSupplier Number - Can also be named Supplier Code\n\n<instructions>\n1. There are 2 entities in <entities></entities> tag, be diligent in ensuring to capture all entities value completely upfront without missing any.\n2. Go through the clues one by one and understand the meaning of each entity type and extract correct values with less false positive.\n3. Avoid calculating any entity value and do not include any other entity outside <entities></entities> tag.\n4. If there are multiple instances of one entity type present in the document, extract all the distinct values with page numbers for that entity type and give them as an array of values. Example: there are multiple \"Invoice Number\" values, include all of them in the output like this: {\"entity\": \"Invoice Number\", \"value\": [\"26\", \"123\", \"456\"], \"confidence\": 100, \"PageNo\":[\"1,2\",\"3,4\",\"5,6\"]}.\n5. Format your output as a JSON object for each type-value pair you extract, in this format: <format> {\"entity\": <entity selected from <entities> list>, \"value\": <value text from input document>, \"confidence\": <confidence in entity match>, \"PageNo\": <Comma separated all page numbers where the entity is present>}</format>\n6. Your response should include text from only document and wrapped in <result></result> tags. Do not include any other explanatory text\n7. If an entity appears on multiple pages, regardless of whether the value is the same or different, list all the corresponding page numbers in the \"PageNo\" field. If the value is the same across pages, the page numbers should be provided as a comma-separated string, e.g., \"1,2,4.\" If the values differ, group the page numbers into lists, e.g., [\"1,2\", \"3,4\", \"2,5\"], corresponding to their respective values, e.g., [\"value1\", \"value2\", \"value3\"].\n</instructions>\n\nReturn the result as JSON:\n<result>\n{\n    \"entities\":\n    [\n        {\"entity\":\"Container Number\",\"value\":\"Container Number Value\", \"confidence\": 83, \"PageNo\":\"1,2,3\"}\n    ]\n}\n</result>\n\n\nBefore giving the response, please make sure you return all entities present in <entities></entities> tag. Provide your final response within <result></result> tags.\n\nExpert:$Entity Classification Prompt End$\n\n$Table Detection Prompt Start$\nUser:\nYou are an expert document-based table extractor assigned to extract tables from provided documents.\nYou are given with the document for layout understanding and the complete OCR of document page by page enclosed in <Page {Page Number}> OCR of Page </Page {Page Number}>\nYour task is to extract the Lignes Table - Ignore line if Item Number is equal Total from the all pages of provided document referring the Columns List and Clues. You can refer to the provided document only for understanding the layout of the tables.\n\nTables to Extract: [Lignes]\n\nTask:\n1. Analyze the table information thoroughly from the provided OCR text.\n2. Refer to the provided image to understand the layout structure of the tables.\n3. Extract only the tables mentioned in the Tables to Extract section. Organize the extracted tables into a tabular format using only the OCR text provided, while following the layout structure from the image.\n4. Ensure that all columns from the Column List are included and provide appropriate and correct values for those that exist in the document. Exclude any columns listed in the Column List that are not present in the document. If there are any additional columns present inside the table in the original document that have not been accounted for as part of the columns in Columns List, provide these extra columns separately under \"Other\" with their actual column names from the OCR. Provide these only if they are not already accounted for in a column in Columns List. For example if Balance Due is already brought under column Quantity BackOrder, it should not be brought again as \"Other (Balance Due)\". Similary if Extended Price is brought under Subtotal column, \"Other (Extended Price)\" should not be brought again.\n5. Provide the column headers in the output as \"Columnname from Columns List\". For the extra columns, provide each as a separate \"Other\" entry with the format \"Other (Actual column header name as per OCR)\": \"Value\". For example, if the column name from the Columns List is \"Item Number\", then provide the column header as Item Number. If extra columns/additional information is present in the table, for example Batch Number, Delivery Date, they should be provided as separate columns - \"Other (Batch Number)\": \"Value\", \"Other (Delivery Date)\": \"Value\". Do not group these under a single \"Other\" object.\n6. After extracting each table, provide Table Confidence in the format:\"{Table_Confidence}\": \"{Table extraction Confidence percentage in the range 0 to 100}\n7. Double check that all the column headers are provided as \"Columnname from Columns List\" and all the extra columns are extracted separately as \"Other\"(Actual column header names as per OCR)\n\nColumns List:\nLignes - [Item Number, PI NO, Total CBM, Total Gross Weight]\n\nClues:\nLignes Table:\nPI NO - \nItem Number - \nTotal CBM - \nTotal Gross Weight - \n\nGuidelines:\n1. Ensure that the table has a proper table name matching with the table in Tables to Extract Section, table column headers, and respective column values under column headers.\n2. For extra columns, provide them separately under \"Other\" with their actual column names from the OCR.\n3. Make sure to omit the columns that are nowhere present in the document ocr.\n4. Do not compute values on your own. Provide only if they are present in the document. For example Totals, Subtotals, Line Numbers.\n\n\n\nOutput Format:\nProvide your response in the following json format. Only provide the json and do not provide any preamble.\nResponse data type definitions:\n{\n  \"Table Name\": {\n    \"headers\": List[str],              # list each element is a list of strings\n    \"rows\": List[Dict[str,str]], # List containing dictionaries with string keys and string values\n    \"Table_Confidence\": str               # A string indicating the confidence level for the entire table\n  }\n}\n\nExamples:\n<result>\n{\n  \"Lignes\": {\n    \"headers\": [\n      \"Item Number\",\n      \"PI NO\",\n      \"Total CBM\",\n      \"Total Gross Weight\",\n      \"PageNo\"\n    ],\n    \"rows\": [\n      {\n        \"Item Number\": \"cellvalue\",\n        \"PI NO\": \"cellvalue\",\n        \"Total CBM\": \"cellvalue\",\n        \"Total Gross Weight\": \"cellvalue\",\n        \"PageNo\": \"1\"\n      }\n    ],\n    \"table_confidence\": \"Confidence of the Table in float\"\n  }\n}\n</result>\n\nGuidelines:\nResponse should not contain any comments and new lines.\nThe table structure should be in above format, with proper table names, column names and column values with Page number under column \"PageNo\".\nStrictly provide the response containing only valid XML in the above provided structure enclosed in <result></result> and do not use code block formatting or any other text formatting. The json inside result tags should be valid and without any error.\nIf no table is present in the document or if the document contains an empty table, the output format should be <result></result>.\n$Table Detection Prompt End$"
+        }
+      ]
+    },
+    "createtime": "2026-01-13T12:54:58",
+    "updatedtime": "2026-01-20T11:36:37.4137927+00:00",
+    "errormsg": "",
+    "dpfVersionId": 767,
+    "versionID": "3",
+    "versionName": "v3",
+    "versionStatus": "InActive",
+    "promptStructure": 0,
+    "is_default": false,
+    "is_base_df": false,
+    "t2vNamespace": "",
+    "t2vNamespaceCode": "",
+    "isImported": 0
+  },
+  {
+    "documetFlowID": 708,
+    "documentFlowName": "U-20 Packing Lists",
+    "documentFlowDescription": "",
+    "activities": [
+      {
+        "activityId": 975,
+        "activityTypeId": 2,
+        "activityName": "Entity Classification",
+        "activityDescription": "Entity Classification",
+        "activityProviders": [
+          {
+            "providerId": 10,
+            "providerName": "GenAI",
+            "providerDescription": "GenAI Model",
+            "providerGuid": null
+          }
+        ],
+        "seqNo": 0,
+        "activityProviderId": 10,
+        "status": 0,
+        "activityGuild": "fee8db9e-90ea-48b6-bc46-8df2dc3198d4",
+        "configurations": null,
+        "base_model_guid": "",
+        "autoSplit": false,
+        "testCount": 20,
+        "trainCount": 80,
+        "expectedAccuracy": 0,
+        "ephocCount": 0
+      }
+    ],
+    "trainingCount": 0,
+    "testCount": 0,
+    "modelAccuracy": 0,
+    "guidID": "b3fe3e46-6530-4a66-879b-d4da9a1d16a9",
+    "status": "Active",
+    "documentClasses": [
+      {
+        "documentClassGuid": "9789a0c2-c283-4e29-8436-e75893022c53",
+        "documentTypeId": 1286,
+        "documentName": "Packing Lists",
+        "documentFields": [
+          {
+            "fieldName": "Container Number",
+            "description": "",
+            "fieldType": "text",
+            "isRequired": false,
+            "idmattributeName": "None"
+          },
+          {
+            "fieldName": "Supplier Number",
+            "description": "Can also be named Supplier Code",
+            "fieldType": "text",
+            "isRequired": false,
+            "idmattributeName": "None"
+          }
+        ],
+        "tableHeaders": [
+          {
+            "tableId": 0,
+            "documentClassId": 0,
+            "tableName": "Lignes",
+            "tableFields": [
+              {
+                "fieldId": 8200,
+                "documentClassId": 0,
+                "fieldName": "PI NO",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 8201,
+                "documentClassId": 0,
+                "fieldName": "Item Number",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              },
+              {
+                "fieldId": 8202,
+                "documentClassId": 0,
+                "fieldName": "Total CBM",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": "Should strictly not extracted data from&#160;@ column but instead extract Total CBM"
+              },
+              {
+                "fieldId": 8203,
+                "documentClassId": 0,
+                "fieldName": "Total Gross Weight",
+                "isRequired": false,
+                "dataType": "text",
+                "idmAttributeName": "",
+                "expectedConfidence": 0,
+                "description": ""
+              }
+            ],
+            "isRequired": false,
+            "idmAttributeName": "None",
+            "expectedConfidence": 0,
+            "description": "Ignore line if Item Number is equal Total"
+          }
+        ],
+        "baseModelID": "",
+        "status": null,
+        "idmDocumentType": "None",
+        "description": "",
+        "documentClassID": 0
+      }
+    ],
+    "configurationAndPrompt": {
+      "ocrType": null,
+      "dcPrompt": null,
+      "ecPrompt": [
+        {
+          "Packing Lists": "$Entity Classification Prompt Start$User: You are an expert Document-Based Question-Answering tool assigned to extract specified entities from a provided document. Analyze the provided PDF document carefully. The document includes layout details, and the OCR text is provided page by page within <Page {Page Number}> tags. Entities to be detected are marked within <entities></entities> tags. Think step by step and use the clues to consider what information is potentially relevant for an entity.\n\n<entities>\nContainer Number,Supplier Number\n</entities>\n\nClues:\nSupplier Number - Can also be named Supplier Code\n\n<instructions>\n1. There are 2 entities in <entities></entities> tag, be diligent in ensuring to capture all entities value completely upfront without missing any.\n2. Go through the clues one by one and understand the meaning of each entity type and extract correct values with less false positive.\n3. Avoid calculating any entity value and do not include any other entity outside <entities></entities> tag.\n4. If there are multiple instances of one entity type present in the document, extract all the distinct values with page numbers for that entity type and give them as an array of values. Example: there are multiple \"Invoice Number\" values, include all of them in the output like this: {\"entity\": \"Invoice Number\", \"value\": [\"26\", \"123\", \"456\"], \"confidence\": 100, \"PageNo\":[\"1,2\",\"3,4\",\"5,6\"]}.\n5. Format your output as a JSON object for each type-value pair you extract, in this format: <format> {\"entity\": <entity selected from <entities> list>, \"value\": <value text from input document>, \"confidence\": <confidence in entity match>, \"PageNo\": <Comma separated all page numbers where the entity is present>}</format>\n6. Your response should include text from only document and wrapped in <result></result> tags. Do not include any other explanatory text\n7. If an entity appears on multiple pages, regardless of whether the value is the same or different, list all the corresponding page numbers in the \"PageNo\" field. If the value is the same across pages, the page numbers should be provided as a comma-separated string, e.g., \"1,2,4.\" If the values differ, group the page numbers into lists, e.g., [\"1,2\", \"3,4\", \"2,5\"], corresponding to their respective values, e.g., [\"value1\", \"value2\", \"value3\"].\n</instructions>\n\nReturn the result as JSON:\n<result>\n{\n    \"entities\":\n    [\n        {\"entity\":\"Container Number\",\"value\":\"Container Number Value\", \"confidence\": 86, \"PageNo\":\"1,2,3\"},\n        {\"entity\":\"Supplier Number\",\"value\":\"\", \"confidence\": 98, \"PageNo\":\"1,2,3\"}\n    ]\n}\n</result>\n\n\nBefore giving the response, please make sure you return all entities present in <entities></entities> tag. Provide your final response within <result></result> tags.\n\nExpert:$Entity Classification Prompt End$\n\n$Table Detection Prompt Start$\nUser:\nYou are an expert document-based table extractor assigned to extract tables from provided documents.\nYou are given with the document for layout understanding and the complete OCR of document page by page enclosed in <Page {Page Number}> OCR of Page </Page {Page Number}>\nYour task is to extract the Lignes Table - Ignore line if Item Number is equal Total from the all pages of provided document referring the Columns List and Clues. You can refer to the provided document only for understanding the layout of the tables.\n\nTables to Extract: [Lignes]\n\nTask:\n1. Analyze the table information thoroughly from the provided OCR text.\n2. Refer to the provided image to understand the layout structure of the tables.\n3. Extract only the tables mentioned in the Tables to Extract section. Organize the extracted tables into a tabular format using only the OCR text provided, while following the layout structure from the image.\n4. Ensure that all columns from the Column List are included and provide appropriate and correct values for those that exist in the document. Exclude any columns listed in the Column List that are not present in the document. If there are any additional columns present inside the table in the original document that have not been accounted for as part of the columns in Columns List, provide these extra columns separately under \"Other\" with their actual column names from the OCR. Provide these only if they are not already accounted for in a column in Columns List. For example if Balance Due is already brought under column Quantity BackOrder, it should not be brought again as \"Other (Balance Due)\". Similary if Extended Price is brought under Subtotal column, \"Other (Extended Price)\" should not be brought again.\n5. Provide the column headers in the output as \"Columnname from Columns List\". For the extra columns, provide each as a separate \"Other\" entry with the format \"Other (Actual column header name as per OCR)\": \"Value\". For example, if the column name from the Columns List is \"Item Number\", then provide the column header as Item Number. If extra columns/additional information is present in the table, for example Batch Number, Delivery Date, they should be provided as separate columns - \"Other (Batch Number)\": \"Value\", \"Other (Delivery Date)\": \"Value\". Do not group these under a single \"Other\" object.\n6. After extracting each table, provide Table Confidence in the format:\"{Table_Confidence}\": \"{Table extraction Confidence percentage in the range 0 to 100}\n7. Double check that all the column headers are provided as \"Columnname from Columns List\" and all the extra columns are extracted separately as \"Other\"(Actual column header names as per OCR)\n\nColumns List:\nLignes - [Item Number, PI NO, Total CBM, Total Gross Weight]\n\nClues:\nLignes Table:\nPI NO - \nItem Number - \nTotal CBM - Should strictly not extracted data from @ column but instead extract Total CBM\nTotal Gross Weight - \n\nGuidelines:\n1. Ensure that the table has a proper table name matching with the table in Tables to Extract Section, table column headers, and respective column values under column headers.\n2. For extra columns, provide them separately under \"Other\" with their actual column names from the OCR.\n3. Make sure to omit the columns that are nowhere present in the document ocr.\n4. Do not compute values on your own. Provide only if they are present in the document. For example Totals, Subtotals, Line Numbers.\n\n\n\nOutput Format:\nProvide your response in the following json format. Only provide the json and do not provide any preamble.\nResponse data type definitions:\n{\n  \"Table Name\": {\n    \"headers\": List[str],              # list each element is a list of strings\n    \"rows\": List[Dict[str,str]], # List containing dictionaries with string keys and string values\n    \"Table_Confidence\": str               # A string indicating the confidence level for the entire table\n  }\n}\n\nExamples:\n<result>\n{\n  \"Lignes\": {\n    \"headers\": [\n      \"Item Number\",\n      \"PI NO\",\n      \"Total CBM\",\n      \"Total Gross Weight\",\n      \"PageNo\"\n    ],\n    \"rows\": [\n      {\n        \"Item Number\": \"cellvalue\",\n        \"PI NO\": \"cellvalue\",\n        \"Total CBM\": \"cellvalue\",\n        \"Total Gross Weight\": \"cellvalue\",\n        \"PageNo\": \"1\"\n      }\n    ],\n    \"table_confidence\": \"Confidence of the Table in float\"\n  }\n}\n</result>\n\nGuidelines:\nResponse should not contain any comments and new lines.\nThe table structure should be in above format, with proper table names, column names and column values with Page number under column \"PageNo\".\nStrictly provide the response containing only valid XML in the above provided structure enclosed in <result></result> and do not use code block formatting or any other text formatting. The json inside result tags should be valid and without any error.\nIf no table is present in the document or if the document contains an empty table, the output format should be <result></result>.\n$Table Detection Prompt End$"
+        }
+      ]
+    },
+    "createtime": "2026-01-13T12:54:58",
+    "updatedtime": "2026-01-20T11:36:37.4182725+00:00",
+    "errormsg": "",
+    "dpfVersionId": 878,
+    "versionID": "4",
+    "versionName": "v4",
+    "versionStatus": "Active",
+    "promptStructure": 0,
+    "is_default": false,
+    "is_base_df": false,
+    "t2vNamespace": "",
+    "t2vNamespaceCode": "",
+    "isImported": 0
+  }
+]

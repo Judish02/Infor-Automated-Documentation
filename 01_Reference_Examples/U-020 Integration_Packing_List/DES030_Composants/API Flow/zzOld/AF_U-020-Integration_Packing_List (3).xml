@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApiFlows creationDate="2026-01-22T11:26:33Z" version="2026.01.9.17d4ce0">
+   <ApiFlow>
+      <Name>AF_U-020-Integration_Packing_List</Name>
+      <Description>Ajoute des informations de packing lists aux numéro OA associé au BL du conteneur
+Creation Date: 21/01/2026
+Updated Date: 
+Version: 1.0</Description>
+      <LastUpdatedBy>Kenylen Motean</LastUpdatedBy>
+      <LastUpdatedOn>2026-01-21 10:12:52.407</LastUpdatedOn>
+      <FlowVersion>1</FlowVersion>
+      <SchemaVersion>2</SchemaVersion>
+      <Operation>{"productName":null,"productLogicalid":null,"method":"POST","path":"u020/PL","proxyPath":"u020","restPath":"PL","endpointName":"u020","resourceName":"u020","description":null,"inputContentTypes":["JSON"],"outputContentTypes":["JSON"],"inputParameters":[{"name":"inputpayload","description":null,"type":"BODY","dataType":"string","required":true,"schema":"{\n  \"$schema\": \"http://json-schema.org/draft-06/schema#\",\n  \"$id\": \"http://schema.infor.com/json-schema/PL_IDPOutput.json\",\n  \"title\": \"PL_IDPOutput\",\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"id\": {\n      \"type\": \"string\",\n      \"description\": \"Unique identifier of the extracted document payload.\"\n    },\n    \"reprocess\": {\n      \"type\": \"boolean\",\n      \"description\": \"Whether the document is flagged for reprocessing.\"\n    },\n    \"visibility\": {\n      \"type\": \"boolean\",\n      \"description\": \"Visibility flag for the document.\"\n    },\n    \"usecase\": {\n      \"type\": \"object\",\n      \"additionalProperties\": false,\n      \"properties\": {\n        \"id\": { \"type\": \"string\" },\n        \"name\": { \"type\": \"string\" },\n        \"erp\": { \"type\": \"string\" }\n      },\n      \"required\": [\"id\", \"name\", \"erp\"],\n      \"description\": \"Use case metadata for the document extraction.\"\n    },\n    \"document_name\": {\n      \"type\": \"string\",\n      \"description\": \"Source document filename.\"\n    },\n    \"idm_document_id\": {\n      \"type\": \"string\",\n      \"description\": \"Document ID in IDM (or other storage).\"\n    },\n    \"category_key\": {\n      \"type\": \"string\",\n      \"description\": \"Extraction category key.\"\n    },\n    \"document_users\": {\n      \"type\": \"array\",\n      \"description\": \"Optional list of users associated to the document.\",\n      \"items\": {\n        \"type\": \"object\",\n        \"additionalProperties\": true\n      }\n    },\n    \"document_entities\": {\n      \"type\": \"array\",\n      \"description\": \"Top-level extracted entities (key/value pairs).\",\n      \"items\": {\n        \"type\": \"object\",\n        \"additionalProperties\": false,\n        \"properties\": {\n          \"key\": { \"type\": \"string\" },\n          \"value\": { \"type\": \"string\" }\n        },\n        \"required\": [\"key\", \"value\"]\n      }\n    },\n    \"table_data\": {\n      \"type\": \"array\",\n      \"description\": \"Extracted tables.\",\n      \"items\": {\n        \"type\": \"object\",\n        \"additionalProperties\": false,\n        \"properties\": {\n          \"name\": { \"type\": \"string\" },\n          \"rows\": {\n            \"type\": \"array\",\n            \"items\": {\n              \"type\": \"object\",\n              \"additionalProperties\": false,\n              \"properties\": {\n                \"row\": {\n                  \"type\": \"array\",\n                  \"description\": \"Cells within the row as key/value pairs.\",\n                  \"items\": {\n                    \"type\": \"object\",\n                    \"additionalProperties\": false,\n                    \"properties\": {\n                      \"key\": { \"type\": \"string\" },\n                      \"value\": { \"type\": \"string\" }\n                    },\n                    \"required\": [\"key\", \"value\"]\n                  }\n                }\n              },\n              \"required\": [\"row\"]\n            }\n          }\n        },\n        \"required\": [\"name\", \"rows\"]\n      }\n    }\n  },\n  \"required\": [\n    \"id\",\n    \"reprocess\",\n    \"visibility\",\n    \"usecase\",\n    \"document_name\",\n    \"idm_document_id\",\n    \"category_key\",\n    \"document_users\",\n    \"document_entities\",\n    \"table_data\"\n  ]\n}\n","example":"{\n  \"id\": \"3a8d1653-c6a1-414e-8b47-7cad7cc22083\",\n  \"reprocess\": true,\n  \"visibility\": false,\n  \"usecase\": {\n    \"id\": \"d570099e-0509-4e20-81ac-c0f97b643047\",\n    \"name\": \"Revue Packing List\",\n    \"erp\": \"M3\"\n  },\n  \"document_name\": \"INVPL-FY0110+FY0111+FY0112+FY0113+FY0114-_Packinglist-1.pdf\",\n  \"idm_document_id\": \"auto_generated\",\n  \"category_key\": \"Informations_extraites\",\n  \"document_users\": [],\n  \"document_entities\": [\n    {\n      \"key\": \"container_number\",\n      \"value\": \"TCKU6300834/M0124369\"\n    },\n    {\n      \"key\": \"supplier_number\",\n      \"value\": \"CHN0000168\"\n    }\n  ],\n  \"table_data\": [\n    {\n      \"name\": \"Lignes\",\n      \"rows\": [\n        {\n          \"row\": [\n            {\n              \"key\": \"numero_oa\",\n              \"value\": \"FY0110\"\n            },\n            {\n              \"key\": \"item_number\",\n              \"value\": \"HD67041/OPSU\"\n            },\n            {\n              \"key\": \"volume_cbm\",\n              \"value\": \"46.500\"\n            },\n            {\n              \"key\": \"poid_brut\",\n              \"value\": \"4350.00\"\n            }\n          ]\n        },\n        {\n          \"row\": [\n            {\n              \"key\": \"numero_oa\",\n              \"value\": \"FY0110\"\n            },\n            {\n              \"key\": \"item_number\",\n              \"value\": \"HD67017/OPSU\"\n            },\n            {\n              \"key\": \"volume_cbm\",\n              \"value\": \"23.250\"\n            },\n            {\n              \"key\": \"poid_brut\",\n              \"value\": \"2175.00\"\n            }\n          ]\n        }\n      ]\n    }\n  ]\n}\n","value":null,"path":null}],"inputContentType":"JSON","outputContentType":"JSON","outputParameters":[{"name":null,"description":null,"type":"BODY","path":null,"value":"{\n\"Success\":\"${input.inputpayload}\"\n}"}]}</Operation>
+      <Variables>{"$_InternalApiFlowReservedKeys_status":"200"}</Variables>
+      <FlowPart>
+         <FlowPartContainer>
+            <SequenceNumber>0</SequenceNumber>
+            <FlowPartContainerType>START_END</FlowPartContainerType>
+            <FlowParts>
+               <FlowPart>
+                  <FlowPartContainer>
+                     <SequenceNumber>0</SequenceNumber>
+                     <FlowPartContainerType>SEQUENTIAL_FLOW</FlowPartContainerType>
+                     <FlowParts>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>0</SequenceNumber>
+                              <Name>ContainerNumber</Name>
+                              <ActivityType>JQ</ActivityType>
+                              <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                              <JQTransformParameterValue>"${input.inputpayload}"</JQTransformParameterValue>
+                              <JQScript>.document_entities | map(select(.key == "container_number")) | .[0].value // ""</JQScript>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>1</SequenceNumber>
+                              <Name>VerificationChampsObligatoires_Entete</Name>
+                              <Description>Vérification si les champs numéro de conteneur et numéro de fournisseur sont bien récupérer</Description>
+                              <ActivityType>JQ</ActivityType>
+                              <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                              <JQTransformParameterValue>"${input.inputpayload}"</JQTransformParameterValue>
+                              <JQScript># Validate IDP output for missing or empty header fields
+# Input: IDP_Output JSON
+# Output: Array of error messages for missing header fields only
+
+# Extract document entities for validation and context
+(.document_entities // []) as $entities |
+
+# Get container_number
+($entities | map(select(.key == "container_number")) | .[0].value // "") as $container |
+
+# Get supplier_number
+($entities | map(select(.key == "supplier_number")) | .[0].value // "") as $supplier |
+
+# Get table rows
+(.table_data | map(select(.name == "Lignes")) | .[0].rows // []) as $rows |
+
+[
+  # Check for missing or empty container_number
+  if ($container == null or $container == "" or $container == " ") then
+    {
+      Conteneur: "",
+      PUNO: "",
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: "",
+      Poids_Brut: "",
+      Code_Erreur: "",
+      Champ_Erreur: "",
+      Item_Number: "",
+      Numero_OA: "",
+      Fournisseur: (if $supplier != "" then $supplier else "inconnu" end),
+      Document: (.document_name // "inconnu"),
+      errorMessage: "Le numéro de conteneur (container_number) est manquant ou vide dans le document '\(.document_name // "inconnu")'"
+    }
+  else
+    empty
+  end,
+  
+  # Check for missing or empty supplier_number
+  if ($supplier == null or $supplier == "" or $supplier == " ") then
+    {
+      Conteneur: (if $container != "" then $container else "inconnu" end),
+      PUNO: "",
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: "",
+      Poids_Brut: "",
+      Code_Erreur: "",
+      Champ_Erreur: "",
+      Item_Number: "",
+      Numero_OA: "",
+      Fournisseur: "",
+      Document: (.document_name // "inconnu"),
+      errorMessage: "Le numéro de fournisseur (supplier_number) est manquant ou vide dans le document '\(.document_name // "inconnu")'"
+    }
+  else
+    empty
+  end,
+  
+  # Check for missing or empty lines
+  if ($rows | length) == 0 then
+    {
+      Conteneur: (if $container != "" then $container else "inconnu" end),
+      PUNO: "",
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: "",
+      Poids_Brut: "",
+      Code_Erreur: "",
+      Champ_Erreur: "",
+      Item_Number: "",
+      Numero_OA: "",
+      Fournisseur: (if $supplier != "" then $supplier else "inconnu" end),
+      Document: (.document_name // "inconnu"),
+      errorMessage: "Aucune ligne trouvée dans la table 'Lignes' du document '\(.document_name // "inconnu")'"
+    }
+  else
+    empty
+  end
+] | select(length &gt; 0)
+</JQScript>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>2</SequenceNumber>
+                              <Name>VerificationChampsObligatoires_Entete_Filtre</Name>
+                              <Description>Vérification si les champs numéro de conteneur et numéro de fournisseur sont bien récupérer</Description>
+                              <ActivityType>CBR_FILTER</ActivityType>
+                              <FilterExpression>if (!$.erreur || $.erreur.length === 0) 'Yes'; else 'No'</FilterExpression>
+                              <FilterWorkflowOutput>{"terminateOutput":"{\n\"ErrorMessage\":\"${VerificationChampsObligatoires_Entete.output}\",\n\"Conteneur\":\"${ContainerNumber.output}\"\n}","status":200}</FilterWorkflowOutput>
+                              <FilterParameters>
+                                 <FilterParameter>
+                                    <Name>erreur</Name>
+                                    <FilterParameterValue>${VerificationChampsObligatoires_Entete.output}</FilterParameterValue>
+                                 </FilterParameter>
+                              </FilterParameters>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>3</SequenceNumber>
+                              <Name>SQRY_SearchHead_PPS360</Name>
+                              <Description>Création SQRY pour recherche API PPS360MI.SearchHead</Description>
+                              <ActivityType>JQ</ActivityType>
+                              <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                              <JQTransformParameterValue>"${input.inputpayload}"</JQTransformParameterValue>
+                              <JQScript># Construct string in format: "CFK1: container_number AND SUNO: supplier_number"
+# Input: PL_IDP_Output.json
+
+# Extract container_number from document_entities
+(.document_entities[] | select(.key == "container_number") | .value) as $container |
+
+# Extract supplier_number from document_entities
+(.document_entities[] | select(.key == "supplier_number") | .value) as $supplier |
+
+# Construct the output string
+"CFK1: \($container) AND SUNO: \($supplier) SortBy:!DNDT"
+</JQScript>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>4</SequenceNumber>
+                              <Name>SearchHead_PPS360MI</Name>
+                              <Description>Récuperation du No de BL depuis PDNHEA</Description>
+                              <ActivityType>ION_API</ActivityType>
+                              <Operation>{"productName":"M3","productLogicalid":"infor.m3","method":"GET","path":"M3/m3api-rest/v2/execute/PPS360MI/SearchHead","proxyPath":"M3/m3api-rest/v2/execute/PPS360MI","restPath":"/SearchHead","endpointName":null,"resourceName":null,"description":null,"inputContentTypes":[],"outputContentTypes":["JSON"],"inputParameters":[{"name":"SQRY","description":"Search query(900)","type":"QUERY","dataType":"string","required":true,"schema":null,"example":null,"value":"${SQRY_SearchHead_PPS360.output}","path":null},{"name":"cono","description":"The company context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"divi","description":"The division context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"lanc","description":"The language code to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"locale","description":"The locale to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"timeZone","description":"The time zone to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":"1","path":null},{"name":"dateformat","description":"Date format to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"excludeempty","description":"When true, empty fields are omitted in response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"righttrim","description":"When true, all values are right trimmed in response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"format","description":"Controls output JSON format","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"extendedresult","description":"Show transaction parameters in the response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"positionkey","description":"The position in a table to start reading from","type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null}],"inputContentType":null,"outputContentType":"JSON","outputParameters":[{"name":"SearchHead","description":null,"type":"BODY","path":null,"value":null}]}</Operation>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>5</SequenceNumber>
+                              <Name>RecuperationErreurNoBL</Name>
+                              <Description>Recuperation des erreur API: No Bon de livraison non retrouver ou fournisseur manquant </Description>
+                              <ActivityType>JQ</ActivityType>
+                              <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                              <JQTransformParameterValue>{
+"response":"${SearchHead_PPS360MI.SearchHead}",
+"request":"${SQRY_SearchHead_PPS360.output}"
+}</JQTransformParameterValue>
+                              <JQScript># Validate EXPORTMI PPS360MI SearchHead response and create error messages
+# Input: { request: query string (e.g., "CFK1: C1 AND SUNO: ADE0000001"), response: PPS360MI_SearchHead response }
+# Output: Array of error messages for failed queries, empty records, missing supplier or container
+
+# Extract CFK1 (container) from request query - handles optional space after colon
+(.request | match("CFK1:\\s*([^ ]+)").captures[0].string // "inconnu") as $requestContainer |
+
+# Extract SUNO (supplier) from request query - handles optional space after colon
+(.request | match("SUNO:\\s*([^ ]+)").captures[0].string // "inconnu") as $requestSupplier |
+
+.response.results as $results |
+
+[
+  $results[] |
+  
+  # Check if the result has an errorMessage field
+  if .errorMessage != null and .errorMessage != "" then
+    {
+      Conteneur: $requestContainer,
+      PUNO: "",
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: "",
+      Poids_Brut: "",
+      Code_Erreur: "",
+      Champ_Erreur: "",
+      Item_Number: "",
+      Numero_OA: "",
+      Fournisseur: $requestSupplier,
+      Document: "",
+      errorMessage: "Erreur lors de la recherche de l'en-tête du bon de livraison pour le conteneur '\($requestContainer)' et fournisseur '\($requestSupplier)': \(.errorMessage)"
+    }
+  # Check if the response has no records
+  elif (.records | length) == 0 then
+    {
+      Conteneur: $requestContainer,
+      PUNO: "",
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: "",
+      Poids_Brut: "",
+      Code_Erreur: "",
+      Champ_Erreur: "",
+      Item_Number: "",
+      Numero_OA: "",
+      Fournisseur: $requestSupplier,
+      Document: "",
+      errorMessage: "Aucun enregistrement trouvé pour la recherche de l'en-tête du bon de livraison pour le conteneur '\($requestContainer)' et fournisseur '\($requestSupplier)'"
+    }
+  else
+    # Check each record for empty supplier or container
+    (
+      .records[] |
+      
+      # Check if SUNO (supplier) is empty
+      if (.SUNO == null or .SUNO == "" or .SUNO == " ") then
+        {
+          Conteneur: $requestContainer,
+          PUNO: "",
+          PNLI: "",
+          PNLS: "",
+          Volume_CBM: "",
+          Poids_Brut: "",
+          Code_Erreur: "",
+          Champ_Erreur: "",
+          Item_Number: "",
+          Numero_OA: "",
+          Fournisseur_Demande: $requestSupplier,
+          Document: (.SUDO // "inconnu"),
+          errorMessage: "Le numéro de fournisseur est vide pour le document: \(.SUDO // "inconnu"). Conteneur demandé: '\($requestContainer)'"
+        }
+      else
+        empty
+      end
+    )
+  end
+] | select(length &gt; 0)
+</JQScript>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>6</SequenceNumber>
+                              <Name>VerificationErreurAPI</Name>
+                              <Description>Verification si erreur recuperation numero de BL</Description>
+                              <ActivityType>CBR_FILTER</ActivityType>
+                              <FilterExpression>if (!$.erreur || $.erreur.length === 0) 'Yes'; else 'No'</FilterExpression>
+                              <FilterWorkflowOutput>{"terminateOutput":"{\n\"ErrorMessage\":\"${RecuperationErreurNoBL.output}\",\n\"Conteneur\":\"${ContainerNumber.output}\"\n}","status":200}</FilterWorkflowOutput>
+                              <FilterParameters>
+                                 <FilterParameter>
+                                    <Name>erreur</Name>
+                                    <FilterParameterValue>${RecuperationErreurNoBL.output}</FilterParameterValue>
+                                 </FilterParameter>
+                              </FilterParameters>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>7</SequenceNumber>
+                              <Name>GetBasicData_CRS620MI</Name>
+                              <Description>Récuperation du fournisseur pour avoir le SUTY</Description>
+                              <ActivityType>ION_API</ActivityType>
+                              <Operation>{"productName":"M3","productLogicalid":"infor.m3","method":"GET","path":"M3/m3api-rest/v2/execute/CRS620MI/GetBasicData","proxyPath":"M3/m3api-rest/v2/execute/CRS620MI","restPath":"/GetBasicData","endpointName":null,"resourceName":null,"description":null,"inputContentTypes":[],"outputContentTypes":["JSON"],"inputParameters":[{"name":"SUNO","description":"Supplier number(10)","type":"QUERY","dataType":"string","required":true,"schema":null,"example":null,"value":"${SearchHead_PPS360MI.SearchHead}.results[0].records[0].SUNO","path":null},{"name":"CONO","description":"Company(3)","type":"QUERY","dataType":"number","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"cono","description":"The company context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"divi","description":"The division context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"lanc","description":"The language code to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"locale","description":"The locale to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"timeZone","description":"The time zone to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"dateformat","description":"Date format to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"excludeempty","description":"When true, empty fields are omitted in response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"righttrim","description":"When true, all values are right trimmed in response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"format","description":"Controls output JSON format","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"extendedresult","description":"Show transaction parameters in the response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"positionkey","description":"The position in a table to start reading from","type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null}],"inputContentType":null,"outputContentType":"JSON","outputParameters":[{"name":"GetBasicData","description":null,"type":"BODY","path":null,"value":null}]}</Operation>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>8</SequenceNumber>
+                              <Name>LstDetail_PPS360MI</Name>
+                              <Description>Récupération des ligne de No de BL</Description>
+                              <ActivityType>ION_API</ActivityType>
+                              <Operation>{"productName":"M3","productLogicalid":"infor.m3","method":"GET","path":"M3/m3api-rest/v2/execute/PPS360MI/LstDetail","proxyPath":"M3/m3api-rest/v2/execute/PPS360MI","restPath":"/LstDetail","endpointName":null,"resourceName":null,"description":null,"inputContentTypes":[],"outputContentTypes":["JSON"],"inputParameters":[{"name":"WHLO","description":"Warehouse(3)","type":"QUERY","dataType":"string","required":true,"schema":null,"example":null,"value":"${SearchHead_PPS360MI.SearchHead}.results[0].records[0].WHLO","path":null},{"name":"SUNO","description":"Supplier number(10)","type":"QUERY","dataType":"string","required":true,"schema":null,"example":null,"value":"${SearchHead_PPS360MI.SearchHead}.results[0].records[0].SUNO","path":null},{"name":"SUTY","description":"Supplier type(1)","type":"QUERY","dataType":"number","required":true,"schema":null,"example":null,"value":"${GetBasicData_CRS620MI.GetBasicData}.results[0].records[0].SUTY","path":null},{"name":"SUDO","description":"Delivery note number(20)","type":"QUERY","dataType":"string","required":true,"schema":null,"example":null,"value":"${SearchHead_PPS360MI.SearchHead}.results[0].records[0].SUDO","path":null},{"name":"DNDT","description":"Delivery note date(10)","type":"QUERY","dataType":"string","required":true,"schema":null,"example":null,"value":"${SearchHead_PPS360MI.SearchHead}.results[0].records[0].DNDT","path":null},{"name":"CONO","description":"Company(3)","type":"QUERY","dataType":"number","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"PACN","description":"Package number(20)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"cono","description":"The company context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"divi","description":"The division context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"lanc","description":"The language code to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"locale","description":"The locale to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"timeZone","description":"The time zone to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"dateformat","description":"Date format to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"excludeempty","description":"When true, empty fields are omitted in response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"righttrim","description":"When true, all values are right trimmed in response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"format","description":"Controls output JSON format","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"extendedresult","description":"Show transaction parameters in the response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"positionkey","description":"The position in a table to start reading from","type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null}],"inputContentType":null,"outputContentType":"JSON","outputParameters":[{"name":"LstDetail","description":null,"type":"BODY","path":null,"value":null}]}</Operation>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>9</SequenceNumber>
+                              <Name>GetOABasedOnItem</Name>
+                              <Description>Filtraire sur les différentes lignes de BL, faire une matching avec les numéro OA en entrées et création requête API bulk pour mettre à jour MPLINE</Description>
+                              <ActivityType>JQ</ActivityType>
+                              <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                              <JQTransformParameterValue>{
+"input":"${input.inputpayload}",
+"LstDetails":"${LstDetail_PPS360MI.LstDetail}"
+}</JQTransformParameterValue>
+                              <JQScript># JQ Script to construct bulk API request for PPS200MI.UpdUserDefLine
+# Input format: { "input": &lt;IDP_Output&gt;, "LstDetails": &lt;PPS360MI_LstDetail_Response&gt; }
+
+# Extract container_number from document_entities
+(.input.document_entities | map(select(.key == "container_number")) | .[0].value // "") as $container_number |
+
+# Extract records from LstDetails for lookup
+(.LstDetails.results[0].records // []) as $lstRecords |
+
+# Get table rows from input
+(.input.table_data | map(select(.name == "Lignes")) | .[0].rows // []) as $inputRows |
+
+# Build bulk API request
+{
+  "program": "PPS200MI",
+  "transactions": [
+    $inputRows[] |
+    # Extract values from each row
+    (.row | map({(.key): .value}) | add) as $rowData |
+    
+    # Find matching record in LstDetails by ITNO = item_number
+    ($lstRecords | map(select(.ITNO == $rowData.item_number)) | .[0] // null) as $matchedRecord |
+    
+    # Only create transaction if we found a matching record
+    select($matchedRecord != null) |
+    
+    # Check if volume_cbm and poid_brut are not null or empty
+    select($rowData.volume_cbm != null and $rowData.volume_cbm != "" and $rowData.volume_cbm != " ") |
+    select($rowData.poid_brut != null and $rowData.poid_brut != "" and $rowData.poid_brut != " ") |
+    
+    # Validate decimal format: must use period (.) not comma (,) as decimal separator
+    select($rowData.volume_cbm | contains(",") | not) |
+    select($rowData.poid_brut | contains(",") | not) |
+    
+    # Convert to numbers and validate
+    ($rowData.volume_cbm | tonumber) as $volume |
+    ($rowData.poid_brut | tonumber) as $poids |
+    
+    # Check if numbers are valid (not null after conversion)
+    select($volume != null) |
+    select($poids != null) |
+    
+    # Convert UDN2 (poids_brut) to whole number
+    ($poids | floor) as $poids_entier |
+    
+    {
+      "transaction": "UpdUserDefLine",
+      "record": {
+        "PUNO": $matchedRecord.RIDN,
+        "PNLI": $matchedRecord.PNLI,
+        "PNLS": ($matchedRecord.PNLS // ""),
+        "UDN1": ($volume | tostring),
+        "UDN2": ($poids_entier | tostring),
+        "UCA1": $container_number
+      }
+    }
+  ]
+}
+</JQScript>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>10</SequenceNumber>
+                              <Name>RecuperationErreurMappageArticle</Name>
+                              <Description>Recuperation de mapping Article: Article depuis facture non present dans le BL</Description>
+                              <ActivityType>JQ</ActivityType>
+                              <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                              <JQTransformParameterValue>{
+"input":"${input.inputpayload}",
+"LstDetails":"${LstDetail_PPS360MI.LstDetail}"
+}</JQTransformParameterValue>
+                              <JQScript># Validate matching between IDP input and LstDetails response
+# Input format: { "input": &lt;IDP_Output&gt;, "LstDetails": &lt;PPS360MI_LstDetail_Response&gt; }
+# Output: Array of error messages for item_numbers that cannot be matched in LstDetails
+
+# Extract container_number from document_entities for error context
+(.input.document_entities | map(select(.key == "container_number")) | .[0].value // "inconnu") as $container_number |
+
+# Extract records from LstDetails for lookup
+(.LstDetails.results[0].records // []) as $lstRecords |
+
+# Get table rows from input
+(.input.table_data | map(select(.name == "Lignes")) | .[0].rows // []) as $inputRows |
+
+# Check for unmatched items
+[
+  $inputRows[] |
+  # Extract values from each row
+  (.row | map({(.key): .value}) | add) as $rowData |
+  
+  # Try to find matching record in LstDetails by ITNO = item_number
+  ($lstRecords | map(select(.ITNO == $rowData.item_number)) | .[0] // null) as $matchedRecord |
+  
+  # Output error if no match found
+  if $matchedRecord == null then
+    {
+      Conteneur: $container_number,
+      PUNO: ($rowData.numero_oa // ""),
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: ($rowData.volume_cbm // ""),
+      Poids_Brut: ($rowData.poid_brut // ""),
+      Code_Erreur: "",
+      Champ_Erreur: "",
+      Item_Number: ($rowData.item_number // ""),
+      Numero_OA: ($rowData.numero_oa // ""),
+      errorMessage: "Aucune correspondance trouvée dans les lignes de bon de livraison pour l'article '\($rowData.item_number)' du conteneur '\($container_number)'"
+    }
+  # Check if volume_cbm is missing or empty
+  elif ($rowData.volume_cbm == null or $rowData.volume_cbm == "" or $rowData.volume_cbm == " ") then
+    {
+      Conteneur: $container_number,
+      PUNO: ($rowData.numero_oa // ""),
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: "",
+      Poids_Brut: ($rowData.poid_brut // ""),
+      Code_Erreur: "",
+      Champ_Erreur: "volume_cbm",
+      Item_Number: ($rowData.item_number // ""),
+      Numero_OA: ($rowData.numero_oa // ""),
+      errorMessage: "Le volume CBM (volume_cbm) est manquant ou vide pour l'article '\($rowData.item_number)' du conteneur '\($container_number)'"
+    }
+  # Check if poid_brut is missing or empty
+  elif ($rowData.poid_brut == null or $rowData.poid_brut == "" or $rowData.poid_brut == " ") then
+    {
+      Conteneur: $container_number,
+      PUNO: ($rowData.numero_oa // ""),
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: ($rowData.volume_cbm // ""),
+      Poids_Brut: "",
+      Code_Erreur: "",
+      Champ_Erreur: "poid_brut",
+      Item_Number: ($rowData.item_number // ""),
+      Numero_OA: ($rowData.numero_oa // ""),
+      errorMessage: "Le poids brut (poid_brut) est manquant ou vide pour l'article '\($rowData.item_number)' du conteneur '\($container_number)'"
+    }
+  # Check if volume_cbm has incorrect decimal format (comma instead of period)
+  elif ($rowData.volume_cbm | tostring | contains(",")) then
+    {
+      Conteneur: $container_number,
+      PUNO: ($rowData.numero_oa // ""),
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: ($rowData.volume_cbm // ""),
+      Poids_Brut: ($rowData.poid_brut // ""),
+      Code_Erreur: "",
+      Champ_Erreur: "volume_cbm",
+      Item_Number: ($rowData.item_number // ""),
+      Numero_OA: ($rowData.numero_oa // ""),
+      errorMessage: "Le volume CBM (volume_cbm) '\($rowData.volume_cbm)' utilise une virgule au lieu d'un point comme séparateur décimal pour l'article '\($rowData.item_number)' du conteneur '\($container_number)'"
+    }
+  # Check if poid_brut has incorrect decimal format (comma instead of period)
+  elif ($rowData.poid_brut | tostring | contains(",")) then
+    {
+      Conteneur: $container_number,
+      PUNO: ($rowData.numero_oa // ""),
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: ($rowData.volume_cbm // ""),
+      Poids_Brut: ($rowData.poid_brut // ""),
+      Code_Erreur: "",
+      Champ_Erreur: "poid_brut",
+      Item_Number: ($rowData.item_number // ""),
+      Numero_OA: ($rowData.numero_oa // ""),
+      errorMessage: "Le poids brut (poid_brut) '\($rowData.poid_brut)' utilise une virgule au lieu d'un point comme séparateur décimal pour l'article '\($rowData.item_number)' du conteneur '\($container_number)'"
+    }
+  # Check if volume_cbm is a valid number
+  elif ($rowData.volume_cbm | try tonumber catch null) == null then
+    {
+      Conteneur: $container_number,
+      PUNO: ($rowData.numero_oa // ""),
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: ($rowData.volume_cbm // ""),
+      Poids_Brut: ($rowData.poid_brut // ""),
+      Code_Erreur: "",
+      Champ_Erreur: "volume_cbm",
+      Item_Number: ($rowData.item_number // ""),
+      Numero_OA: ($rowData.numero_oa // ""),
+      errorMessage: "Le volume CBM (volume_cbm) '\($rowData.volume_cbm)' n'est pas un nombre valide pour l'article '\($rowData.item_number)' du conteneur '\($container_number)'"
+    }
+  # Check if poid_brut is a valid number
+  elif ($rowData.poid_brut | try tonumber catch null) == null then
+    {
+      Conteneur: $container_number,
+      PUNO: ($rowData.numero_oa // ""),
+      PNLI: "",
+      PNLS: "",
+      Volume_CBM: ($rowData.volume_cbm // ""),
+      Poids_Brut: ($rowData.poid_brut // ""),
+      Code_Erreur: "",
+      Champ_Erreur: "poid_brut",
+      Item_Number: ($rowData.item_number // ""),
+      Numero_OA: ($rowData.numero_oa // ""),
+      errorMessage: "Le poids brut (poid_brut) '\($rowData.poid_brut)' n'est pas un nombre valide pour l'article '\($rowData.item_number)' du conteneur '\($container_number)'"
+    }
+  else
+    empty
+  end
+] | select(length &gt; 0)
+</JQScript>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>11</SequenceNumber>
+                              <Name>UpdUserDefLine_PPS200MI</Name>
+                              <Description>Mis à jour bulk dans la table MPLINE</Description>
+                              <ActivityType>ION_API</ActivityType>
+                              <Operation>{"productName":"M3","productLogicalid":"infor.m3","method":"POST","path":"M3/m3api-rest/v2/execute","proxyPath":"M3/m3api-rest/v2","restPath":"/execute","endpointName":null,"resourceName":null,"description":null,"inputContentTypes":["JSON"],"outputContentTypes":["JSON"],"inputParameters":[{"name":"cono","description":"The company context to use. Defaults to user default","type":"QUERY","dataType":"integer","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"divi","description":"The division context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"lanc","description":"The language code to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"locale","description":"Locale to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"timeZone","description":"Time zone to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","type":"QUERY","dataType":"integer","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"dateformat","description":"Date format to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"excludempty","description":"When true, empty fields are omitted in response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"righttrim","description":"When true, all values are right trimmed in response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"format","description":"Controls output JSON format","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"extendedresult","description":"Show transaction parameters in the response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"positionkey","description":"Position to start reading from","type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"body","description":"Since the request body is processed in a streaming fashion, ordering of attributes must be taken into account - the \"transactions\" attribute must be the last attribute of the request.","type":"BODY","dataType":null,"required":true,"schema":null,"example":null,"value":"${GetOABasedOnItem.output}","path":null}],"inputContentType":"JSON","outputContentType":"JSON","outputParameters":[{"name":"UpdUserDefLine","description":null,"type":"BODY","path":null,"value":null}]}</Operation>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>12</SequenceNumber>
+                              <Name>RecuperationErreurUpdUserDefLine</Name>
+                              <Description>Recuperation des erreur API: Erreur lors de la mis à jour la des lignes OA</Description>
+                              <ActivityType>JQ</ActivityType>
+                              <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                              <JQTransformParameterValue>{
+"response":"${UpdUserDefLine_PPS200MI.UpdUserDefLine}",
+"request":"${GetOABasedOnItem.output}",
+"erreurLstDetail":"${RecuperationErreurMappageArticle.output}"
+}</JQTransformParameterValue>
+                              <JQScript># Validate PPS200MI UpdUserDefLine response and include LstDetail errors
+# Input format: { "response": &lt;PPS200MI_UpdUserDefLine&gt;, "request": &lt;bulk_request&gt;, "erreurLstDetail": &lt;errors_array&gt; }
+# Output: Array of error messages combining PPS200MI validation and LstDetail errors
+
+# Get LstDetail errors (if any)
+(.erreurLstDetail // []) as $lstDetailErrors |
+
+.request.transactions as $requests |
+.response.results as $results |
+
+# Combine PPS200MI errors with LstDetail errors
+[
+  # First, check PPS200MI response for errors
+  (
+    range($results | length) as $idx |
+    $results[$idx] as $result |
+    $requests[$idx] as $request |
+    
+    # Extract request details for error context
+    $request.record as $record |
+    
+    # Check if the result has an errorMessage field
+    if $result.errorMessage != null and $result.errorMessage != "" then
+      {
+        Conteneur: ($record.UCA1 // ""),
+        PUNO: ($record.PUNO // ""),
+        PNLI: ($record.PNLI // ""),
+        PNLS: ($record.PNLS // ""),
+        Volume_CBM: ($record.UDN1 // ""),
+        Poids_Brut: ($record.UDN2 // ""),
+        Code_Erreur: ($result.errorCode // ""),
+        Champ_Erreur: ($result.errorField // ""),
+        Item_Number: "",
+        Numero_OA: ($record.PUNO // ""),
+        errorMessage: "Erreur lors de la mise à jour de la ligne OA '\($record.PUNO // "inconnu")' ligne '\($record.PNLI // "inconnu")': \($result.errorMessage)"
+      }
+    else
+      empty
+    end
+  ),
+  # Then, include all LstDetail errors
+  $lstDetailErrors[]
+] | select(length &gt; 0)
+</JQScript>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>13</SequenceNumber>
+                              <Name>VerificationErreurAPI_UpdUserDefLine</Name>
+                              <Description>Recuperation des erreur API: Erreur lors de la mis à jour la des lignes OA</Description>
+                              <ActivityType>CBR_FILTER</ActivityType>
+                              <FilterExpression>if (!$.erreur || $.erreur.length === 0) 'Yes'; else 'No'</FilterExpression>
+                              <FilterWorkflowOutput>{"terminateOutput":"{\n\"ErrorMessage\":\"${RecuperationErreurUpdUserDefLine.output}\",\n\"Conteneur\":\"${ContainerNumber.output}\"\n}","status":200}</FilterWorkflowOutput>
+                              <FilterParameters>
+                                 <FilterParameter>
+                                    <Name>erreur</Name>
+                                    <FilterParameterValue>${RecuperationErreurUpdUserDefLine.output}</FilterParameterValue>
+                                 </FilterParameter>
+                              </FilterParameters>
+                           </Activity>
+                        </FlowPart>
+                     </FlowParts>
+                  </FlowPartContainer>
+               </FlowPart>
+            </FlowParts>
+         </FlowPartContainer>
+      </FlowPart>
+   </ApiFlow>
+</ApiFlows>

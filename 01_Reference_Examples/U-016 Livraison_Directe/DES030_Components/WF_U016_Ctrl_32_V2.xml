@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkflowDefinitions creationDate="2026-05-25T08:48:48Z" versionNumber="2026.05.9.6f185fa">
+   <WorkflowDefinition version="1">
+      <Name>WF_U016_Ctrl_32_V2</Name>
+      <Description>Dev : U-016
+Date : 13/01/2026
+Evolution: WF_U016_Ctrl_32_V2
+Date: 11/03/2026</Description>
+      <LastUpdatedBy>Ashley Bheemul</LastUpdatedBy>
+      <Variables>
+         <Variable>
+            <Name>PLSX</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>DLIX</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>countLine</Name>
+            <DataType>Integer</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <InitialValue>0</InitialValue>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>qery_colisage</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>CONO</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>DIVI</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>countLine_colisage</Name>
+            <DataType>Integer</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <InitialValue>0</InitialValue>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>outputLstDelivery</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>qery</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <InitialValue/>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>lengthLstDelivery</Name>
+            <DataType>Integer</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <InitialValue>0</InitialValue>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+      </Variables>
+      <Views/>
+      <WorkFlowTrees/>
+      <DistributionItems/>
+      <WorkflowDecisionTables/>
+      <SequentialFlow>
+         <SequenceNumber>0</SequenceNumber>
+         <FlowParts>
+            <FlowPart type="Wait">
+               <SequenceNumber>2</SequenceNumber>
+               <Name>Wait 1 minute</Name>
+               <Duration>1</Duration>
+               <WaitUnit>MINUTES</WaitUnit>
+            </FlowPart>
+            <FlowPart type="SubWorkflow">
+               <SequenceNumber>3</SequenceNumber>
+               <State>1</State>
+               <Name>Creer Colisage</Name>
+               <MainFlowBranch>
+                  <SequentialFlow>
+                     <SequenceNumber>0</SequenceNumber>
+                     <FlowParts>
+                        <FlowPart type="Decision">
+                           <SequenceNumber>3</SequenceNumber>
+                           <Condition>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;Condition version="1.0"&gt;&lt;UsedSubcondition&gt;NoData&lt;/UsedSubcondition&gt;&lt;Subconditions&gt;&lt;Subcondition&gt;&lt;Name&gt;NoData&lt;/Name&gt;&lt;Type&gt;AttributeValueComparison&lt;/Type&gt;&lt;AttributeName&gt;lengthLstDelivery&lt;/AttributeName&gt;&lt;ComparisonOperator&gt;Equal&lt;/ComparisonOperator&gt;&lt;Value&gt;0&lt;/Value&gt;&lt;/Subcondition&gt;&lt;/Subconditions&gt;&lt;/Condition&gt;</Condition>
+                           <TrueBranch>
+                              <SequentialFlow>
+                                 <SequenceNumber>0</SequenceNumber>
+                                 <FlowParts/>
+                              </SequentialFlow>
+                           </TrueBranch>
+                           <FalseBranch>
+                              <SequentialFlow>
+                                 <SequenceNumber>0</SequenceNumber>
+                                 <FlowParts>
+                                    <FlowPart type="LoopBack">
+                                       <SequenceNumber>1</SequenceNumber>
+                                       <Condition>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;Condition version="1.0"&gt;&lt;UsedSubcondition&gt;Endpoint&lt;/UsedSubcondition&gt;&lt;Subconditions&gt;&lt;Subcondition&gt;&lt;Name&gt;Endpoint&lt;/Name&gt;&lt;Type&gt;AttributeComparison&lt;/Type&gt;&lt;FirstAttributeName&gt;countLine_colisage&lt;/FirstAttributeName&gt;&lt;ComparisonOperator&gt;LessThan&lt;/ComparisonOperator&gt;&lt;SecondAttributeName&gt;lengthLstDelivery&lt;/SecondAttributeName&gt;&lt;/Subcondition&gt;&lt;/Subconditions&gt;&lt;/Condition&gt;</Condition>
+                                       <MaxLoops>999</MaxLoops>
+                                       <BackBranch>
+                                          <SequentialFlow>
+                                             <SequenceNumber>0</SequenceNumber>
+                                             <FlowParts/>
+                                          </SequentialFlow>
+                                       </BackBranch>
+                                       <MainBranch>
+                                          <SequentialFlow>
+                                             <SequenceNumber>0</SequenceNumber>
+                                             <FlowParts>
+                                                <FlowPart type="IonApiExitPoint">
+                                                   <SequenceNumber>2</SequenceNumber>
+                                                   <Name>MWS410MI.GetHead</Name>
+                                                   <Description>MWS410MI.GetHead</Description>
+                                                   <RetryTime>600</RetryTime>
+                                                   <TimeOut>600</TimeOut>
+                                                   <IgnoreErrors>False</IgnoreErrors>
+                                                   <IonApiMethod>{"productLogicalId":"infor.m3","operationProxyPath":"M3/m3api-rest/v2/execute/MWS410MI","operationRestPath":"/GetHead","productName":"M3","operationPath":"M3/m3api-rest/v2/execute/MWS410MI/GetHead","summary":"Get Delivery head information","httpMethod":"GET","availableOutputContentTypes":["JSON"],"outputContentType":"JSON","input":[{"wfVariableName":"CONO","literalValue":null,"name":"CONO","description":"Company(3)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"DLIX","literalValue":null,"name":"DLIX","description":"Delivery number(11)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"CONA","description":"Consignee(10)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"PUTP","description":"Delivery note reference qualifier(1)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"PUSN","description":"Delivery note reference(17)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"CONO","literalValue":null,"name":"cono","description":"The company context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"divi","description":"The division context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"lanc","description":"The language code to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"locale","description":"The locale to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"timeZone","description":"The time zone to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"dateformat","description":"Date format to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"excludeempty","description":"When true, empty fields are omitted in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"righttrim","description":"When true, all values are right trimmed in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"format","description":"Controls output JSON format","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"extendedresult","description":"Show transaction parameters in the response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"positionkey","description":"The position in a table to start reading from","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"}],"output":[{"wfVariableName":"PLSX","type":"BODY","path":"$.results[0].records[0].PLSX","optional":false}],"inputBody":{"name":null,"description":null,"required":false,"availableInputContentTypes":[],"inputContentType":null,"body":" ","ignore":true,"structureNamesFromBody":[],"variableNamesFromBody":[]}}</IonApiMethod>
+                                                   <IsCustom>False</IsCustom>
+                                                </FlowPart>
+                                                <FlowPart type="Scripting">
+                                                   <SequenceNumber>1</SequenceNumber>
+                                                   <Name>GetnIteration_1</Name>
+                                                   <ScriptingConfiguration>{"scriptName":"GetnIterationData","ignoreErrors":false,"errorCodeVariableName":null,"errorMessageVariableName":null,"input":[{"wfVariableName":"countLine_colisage","scriptVariableName":"count","scriptDataType":"INTEGER","literalValue":null,"treeName":null},{"wfVariableName":"outputLstDelivery","scriptVariableName":"Input_List","scriptDataType":"STRING","literalValue":null,"treeName":null}],"output":[{"wfVariableName":"DLIX","scriptVariableName":"DLIX","scriptDataType":"STRING"}]}</ScriptingConfiguration>
+                                                </FlowPart>
+                                                <FlowPart type="IonApiExitPoint">
+                                                   <SequenceNumber>3</SequenceNumber>
+                                                   <Name>MWS423MI.PackPickList</Name>
+                                                   <Description>MWS423MI.PackPickList</Description>
+                                                   <RetryTime>600</RetryTime>
+                                                   <TimeOut>600</TimeOut>
+                                                   <IgnoreErrors>False</IgnoreErrors>
+                                                   <IonApiMethod>{"productLogicalId":"infor.m3","operationProxyPath":"M3/m3api-rest/v2/execute/MWS423MI","operationRestPath":"/PackPicklist","productName":"M3","operationPath":"M3/m3api-rest/v2/execute/MWS423MI/PackPicklist","summary":"Pack reporting for a complete picking list","httpMethod":"GET","availableOutputContentTypes":["JSON"],"outputContentType":"JSON","input":[{"wfVariableName":"CONO","literalValue":null,"name":"CONO","description":"Company(3)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"DLIX","literalValue":null,"name":"DLIX","description":"Delivery number(11)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"PLSX","literalValue":null,"name":"PLSX","description":"Picking list suffix(3)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"CONO","literalValue":null,"name":"cono","description":"The company context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"divi","description":"The division context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"lanc","description":"The language code to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"locale","description":"The locale to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"timeZone","description":"The time zone to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"dateformat","description":"Date format to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"excludeempty","description":"When true, empty fields are omitted in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"righttrim","description":"When true, all values are right trimmed in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"format","description":"Controls output JSON format","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"extendedresult","description":"Show transaction parameters in the response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"positionkey","description":"The position in a table to start reading from","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"}],"output":[],"inputBody":{"name":null,"description":null,"required":false,"availableInputContentTypes":[],"inputContentType":null,"body":" ","ignore":true,"structureNamesFromBody":[],"variableNamesFromBody":[]}}</IonApiMethod>
+                                                   <IsCustom>False</IsCustom>
+                                                </FlowPart>
+                                                <FlowPart type="Assignment">
+                                                   <SequenceNumber>4</SequenceNumber>
+                                                   <Name>Increment CountLine_1</Name>
+                                                   <MultipleAssignmentsConfiguration>[{"assignmentType":"EXPRESSION_ASSIGNMENT","expression":"[countLine_colisage] + 1","treePath":null,"variableName":"countLine_colisage","personFullName":null}]</MultipleAssignmentsConfiguration>
+                                                </FlowPart>
+                                             </FlowParts>
+                                          </SequentialFlow>
+                                       </MainBranch>
+                                    </FlowPart>
+                                 </FlowParts>
+                              </SequentialFlow>
+                           </FalseBranch>
+                        </FlowPart>
+                        <FlowPart type="Assignment">
+                           <SequenceNumber>1</SequenceNumber>
+                           <Name>qeryBuilder_colisage</Name>
+                           <MultipleAssignmentsConfiguration>[{"assignmentType":"EXPRESSION_ASSIGNMENT","expression":"\"OQDLIX from MHDISH where OQPGRS = 50 and OQDCC1 = 900 and OQPIST = 10\"","treePath":null,"variableName":"qery_colisage","personFullName":null}]</MultipleAssignmentsConfiguration>
+                        </FlowPart>
+                        <FlowPart type="IonApiExitPoint">
+                           <SequenceNumber>2</SequenceNumber>
+                           <Name>EXPORTMI.MHDISH_colisage</Name>
+                           <Description>EXPORTMI.MHDISH</Description>
+                           <RetryTime>600</RetryTime>
+                           <TimeOut>600</TimeOut>
+                           <IgnoreErrors>False</IgnoreErrors>
+                           <IonApiMethod>{"productLogicalId":"infor.m3","operationProxyPath":"M3/m3api-rest/v2/execute/EXPORTMI","operationRestPath":"/Select","productName":"M3","operationPath":"M3/m3api-rest/v2/execute/EXPORTMI/Select","summary":"Select","httpMethod":"GET","availableOutputContentTypes":["JSON"],"outputContentType":"JSON","input":[{"wfVariableName":"qery_colisage","literalValue":null,"name":"QERY","description":"Query statement(982)","swaggerDatatype":"string","swaggerFormat":null,"required":true,"type":"QUERY"},{"wfVariableName":null,"literalValue":",","name":"SEPC","description":"Separator character or blank for flat file(1)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"HDRS","description":"Include headers, 1 or 0 or blank(1)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"CONO","literalValue":null,"name":"cono","description":"The company context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"divi","description":"The division context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"lanc","description":"The language code to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"locale","description":"The locale to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"timeZone","description":"The time zone to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"dateformat","description":"Date format to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"excludeempty","description":"When true, empty fields are omitted in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"righttrim","description":"When true, all values are right trimmed in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"format","description":"Controls output JSON format","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"extendedresult","description":"Show transaction parameters in the response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"positionkey","description":"The position in a table to start reading from","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"}],"output":[{"wfVariableName":"outputLstDelivery","type":"BODY","path":"$.results[0].records","optional":true},{"wfVariableName":"lengthLstDelivery","type":"BODY","path":"$.results[0].records.length()","optional":false}],"inputBody":{"name":null,"description":null,"required":false,"availableInputContentTypes":[],"inputContentType":null,"body":" ","ignore":true,"structureNamesFromBody":[],"variableNamesFromBody":[]}}</IonApiMethod>
+                           <IsCustom>False</IsCustom>
+                        </FlowPart>
+                     </FlowParts>
+                  </SequentialFlow>
+               </MainFlowBranch>
+            </FlowPart>
+            <FlowPart type="SubWorkflow">
+               <SequenceNumber>1</SequenceNumber>
+               <State>1</State>
+               <Name>CTRL32</Name>
+               <MainFlowBranch>
+                  <SequentialFlow>
+                     <SequenceNumber>0</SequenceNumber>
+                     <FlowParts>
+                        <FlowPart type="IonApiExitPoint">
+                           <SequenceNumber>2</SequenceNumber>
+                           <Name>EXPORTMI.MHDISH</Name>
+                           <Description>EXPORTMI.MHDISH</Description>
+                           <RetryTime>600</RetryTime>
+                           <TimeOut>600</TimeOut>
+                           <IgnoreErrors>False</IgnoreErrors>
+                           <IonApiMethod>{"productLogicalId":"infor.m3","operationProxyPath":"M3/m3api-rest/v2/execute/EXPORTMI","operationRestPath":"/Select","productName":"M3","operationPath":"M3/m3api-rest/v2/execute/EXPORTMI/Select","summary":"Select","httpMethod":"GET","availableOutputContentTypes":["JSON"],"outputContentType":"JSON","input":[{"wfVariableName":"qery","literalValue":null,"name":"QERY","description":"Query statement(982)","swaggerDatatype":"string","swaggerFormat":null,"required":true,"type":"QUERY"},{"wfVariableName":null,"literalValue":",","name":"SEPC","description":"Separator character or blank for flat file(1)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"HDRS","description":"Include headers, 1 or 0 or blank(1)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"CONO","literalValue":null,"name":"cono","description":"The company context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"divi","description":"The division context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"lanc","description":"The language code to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"locale","description":"The locale to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"timeZone","description":"The time zone to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"dateformat","description":"Date format to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"excludeempty","description":"When true, empty fields are omitted in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"righttrim","description":"When true, all values are right trimmed in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"format","description":"Controls output JSON format","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"extendedresult","description":"Show transaction parameters in the response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"positionkey","description":"The position in a table to start reading from","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"}],"output":[{"wfVariableName":"outputLstDelivery","type":"BODY","path":"$.results[0].records","optional":true},{"wfVariableName":"lengthLstDelivery","type":"BODY","path":"$.results[0].records.length()","optional":false}],"inputBody":{"name":null,"description":null,"required":false,"availableInputContentTypes":[],"inputContentType":null,"body":" ","ignore":true,"structureNamesFromBody":[],"variableNamesFromBody":[]}}</IonApiMethod>
+                           <IsCustom>False</IsCustom>
+                        </FlowPart>
+                        <FlowPart type="Assignment">
+                           <SequenceNumber>1</SequenceNumber>
+                           <Name>qeryBuilder</Name>
+                           <MultipleAssignmentsConfiguration>[{"assignmentType":"EXPRESSION_ASSIGNMENT","expression":"\"OQDLIX from MHDISH where OQPGRS &lt; 50 and OQDCC1 = 900\"","treePath":null,"variableName":"qery","personFullName":null}]</MultipleAssignmentsConfiguration>
+                        </FlowPart>
+                        <FlowPart type="Decision">
+                           <SequenceNumber>3</SequenceNumber>
+                           <Condition>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;Condition version="1.0"&gt;&lt;UsedSubcondition&gt;NoData&lt;/UsedSubcondition&gt;&lt;Subconditions&gt;&lt;Subcondition&gt;&lt;Name&gt;NoData&lt;/Name&gt;&lt;Type&gt;AttributeValueComparison&lt;/Type&gt;&lt;AttributeName&gt;lengthLstDelivery&lt;/AttributeName&gt;&lt;ComparisonOperator&gt;Equal&lt;/ComparisonOperator&gt;&lt;Value&gt;0&lt;/Value&gt;&lt;/Subcondition&gt;&lt;/Subconditions&gt;&lt;/Condition&gt;</Condition>
+                           <TrueBranch>
+                              <SequentialFlow>
+                                 <SequenceNumber>0</SequenceNumber>
+                                 <FlowParts/>
+                              </SequentialFlow>
+                           </TrueBranch>
+                           <FalseBranch>
+                              <SequentialFlow>
+                                 <SequenceNumber>0</SequenceNumber>
+                                 <FlowParts>
+                                    <FlowPart type="LoopBack">
+                                       <SequenceNumber>1</SequenceNumber>
+                                       <Condition>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;Condition version="1.0"&gt;&lt;UsedSubcondition&gt;Endpoint&lt;/UsedSubcondition&gt;&lt;Subconditions&gt;&lt;Subcondition&gt;&lt;Name&gt;Endpoint&lt;/Name&gt;&lt;Type&gt;AttributeComparison&lt;/Type&gt;&lt;FirstAttributeName&gt;countLine&lt;/FirstAttributeName&gt;&lt;ComparisonOperator&gt;LessThan&lt;/ComparisonOperator&gt;&lt;SecondAttributeName&gt;lengthLstDelivery&lt;/SecondAttributeName&gt;&lt;/Subcondition&gt;&lt;/Subconditions&gt;&lt;/Condition&gt;</Condition>
+                                       <MaxLoops>999</MaxLoops>
+                                       <BackBranch>
+                                          <SequentialFlow>
+                                             <SequenceNumber>0</SequenceNumber>
+                                             <FlowParts/>
+                                          </SequentialFlow>
+                                       </BackBranch>
+                                       <MainBranch>
+                                          <SequentialFlow>
+                                             <SequenceNumber>0</SequenceNumber>
+                                             <FlowParts>
+                                                <FlowPart type="Assignment">
+                                                   <SequenceNumber>3</SequenceNumber>
+                                                   <Name>Increment CountLine</Name>
+                                                   <MultipleAssignmentsConfiguration>[{"assignmentType":"EXPRESSION_ASSIGNMENT","expression":"[countLine] + 1","treePath":null,"variableName":"countLine","personFullName":null}]</MultipleAssignmentsConfiguration>
+                                                </FlowPart>
+                                                <FlowPart type="Scripting">
+                                                   <SequenceNumber>1</SequenceNumber>
+                                                   <Name>GetnIteration</Name>
+                                                   <Description>script to define api call for n record</Description>
+                                                   <ScriptingConfiguration>{"scriptName":"GetnIterationData","ignoreErrors":false,"errorCodeVariableName":null,"errorMessageVariableName":null,"input":[{"wfVariableName":"outputLstDelivery","scriptVariableName":"Input_List","scriptDataType":"STRING","literalValue":null,"treeName":null},{"wfVariableName":"countLine","scriptVariableName":"count","scriptDataType":"INTEGER","literalValue":null,"treeName":null}],"output":[{"wfVariableName":"DLIX","scriptVariableName":"DLIX","scriptDataType":"STRING"}]}</ScriptingConfiguration>
+                                                </FlowPart>
+                                                <FlowPart type="IonApiExitPoint">
+                                                   <SequenceNumber>2</SequenceNumber>
+                                                   <Name>IPS</Name>
+                                                   <Description>U016_MWS410</Description>
+                                                   <RetryTime>600</RetryTime>
+                                                   <TimeOut>600</TimeOut>
+                                                   <IgnoreErrors>False</IgnoreErrors>
+                                                   <IonApiMethod>{"productLogicalId":"infor.m3","operationProxyPath":"M3/ips/service","operationRestPath":"/U016_MWS410","productName":"M3","operationPath":"M3/ips/service/U016_MWS410","summary":"Execute IPS service U016_MWS410 (method MWS410)","httpMethod":"POST","availableOutputContentTypes":["XML"],"outputContentType":"XML","input":[],"output":[],"inputBody":{"name":"body","description":"The XML SOAP request","required":true,"availableInputContentTypes":["XML"],"inputContentType":"XML","body":"&lt;?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?&gt;\n&lt;SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:cred=\"http://lawson.com/ws/credentials\" xmlns:mws=\"http://schemas.infor.com/ips/U016_MWS410/MWS410\"&gt;\n  &lt;SOAP-ENV:Header&gt;\n    &lt;cred:lws&gt;\n      &lt;!--Optional:--&gt;\n      &lt;cred:company&gt;$value(CONO)&lt;/cred:company&gt;\n      &lt;!--Optional:--&gt;\n      &lt;cred:division&gt;$value(DIVI)&lt;/cred:division&gt;\n    &lt;/cred:lws&gt;\n  &lt;/SOAP-ENV:Header&gt;\n  &lt;SOAP-ENV:Body&gt;\n    &lt;mws:MWS410&gt;\n      &lt;mws:MWS410&gt;\n        &lt;!--Optional:--&gt;\n        &lt;mws:SortingOrder&gt;7&lt;/mws:SortingOrder&gt;\n        &lt;!--Optional:--&gt;\n        &lt;mws:Option&gt;32&lt;/mws:Option&gt;\n        &lt;!--Optional:--&gt;\n        &lt;mws:FilterValue&gt;$value(DLIX)&lt;/mws:FilterValue&gt;\n      &lt;/mws:MWS410&gt;\n    &lt;/mws:MWS410&gt;\n  &lt;/SOAP-ENV:Body&gt;\n&lt;/SOAP-ENV:Envelope&gt;","ignore":false,"structureNamesFromBody":[],"variableNamesFromBody":["CONO","DLIX","DIVI"]}}</IonApiMethod>
+                                                   <IsCustom>False</IsCustom>
+                                                </FlowPart>
+                                             </FlowParts>
+                                          </SequentialFlow>
+                                       </MainBranch>
+                                    </FlowPart>
+                                 </FlowParts>
+                              </SequentialFlow>
+                           </FalseBranch>
+                        </FlowPart>
+                     </FlowParts>
+                  </SequentialFlow>
+               </MainFlowBranch>
+            </FlowPart>
+         </FlowParts>
+      </SequentialFlow>
+   </WorkflowDefinition>
+</WorkflowDefinitions>

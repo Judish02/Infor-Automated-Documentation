@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkflowDefinitions creationDate="2026-01-21T08:16:42Z" versionNumber="2026.01.9.17d4ce0">
+   <WorkflowDefinition version="1">
+      <Name>WF_U020_Integration_Packing_List</Name>
+      <Description>Envoie erreur intégration packing list au groupe utilisateur défini
+Creation date: 21/01/2026
+Version: 1.0</Description>
+      <LastUpdatedBy>Kenylen Motean</LastUpdatedBy>
+      <Variables>
+         <Variable>
+            <Name>Erreurs</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>Conteneur</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+      </Variables>
+      <Views/>
+      <WorkFlowTrees/>
+      <DistributionItems>
+         <DistributionItem>
+            <Id>1775</Id>
+            <Type>Person</Type>
+            <Name>587e27cf-f278-47f8-8e31-adbc82a751d3</Name>
+            <Description>Kenylen Motean</Description>
+            <SendEmail>False</SendEmail>
+         </DistributionItem>
+      </DistributionItems>
+      <WorkflowDecisionTables/>
+      <SequentialFlow>
+         <SequenceNumber>0</SequenceNumber>
+         <FlowParts>
+            <FlowPart type="UserTask">
+               <SequenceNumber>1</SequenceNumber>
+               <Name>Envoie Erreur</Name>
+               <SummaryMessage>Erreur integration pour packing list [Conteneur]</SummaryMessage>
+               <Priority>Medium</Priority>
+               <IsParallel>False</IsParallel>
+               <TaskActionType>StandardAction</TaskActionType>
+               <UserTaskType>NOTIFICATION</UserTaskType>
+               <MaxEscalationLevel>1</MaxEscalationLevel>
+               <DistributionComplexity>simple</DistributionComplexity>
+               <DistributionItemIds>
+                  <DistributionItemId>1775</DistributionItemId>
+               </DistributionItemIds>
+               <Parameters>
+                  <Parameter>
+                     <Label>Conteneur</Label>
+                     <VariableName>Conteneur</VariableName>
+                     <ReadOnly>True</ReadOnly>
+                     <SequenceNumber>1</SequenceNumber>
+                     <CompletionProperty>NotApplicable</CompletionProperty>
+                     <Labels/>
+                  </Parameter>
+                  <Parameter>
+                     <Label>Erreurs</Label>
+                     <VariableName>Erreurs</VariableName>
+                     <ReadOnly>True</ReadOnly>
+                     <SequenceNumber>0</SequenceNumber>
+                     <CompletionProperty>NotApplicable</CompletionProperty>
+                     <Labels/>
+                  </Parameter>
+               </Parameters>
+               <ActionButtons/>
+               <TaskMessages/>
+               <Escalations/>
+               <WorkflowDecisionTableIds/>
+               <PropagateNotes>False</PropagateNotes>
+            </FlowPart>
+         </FlowParts>
+      </SequentialFlow>
+   </WorkflowDefinition>
+</WorkflowDefinitions>

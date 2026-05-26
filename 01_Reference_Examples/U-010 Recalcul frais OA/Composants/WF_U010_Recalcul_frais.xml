@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkflowDefinitions creationDate="2025-11-10T06:08:58Z" versionNumber="2025.11.13.ba4cdd5">
+   <WorkflowDefinition version="1">
+      <Name>WF_U010_Recalcul_frais</Name>
+      <Description>Recuperer les lignes OA tomber en erreur depuis le recalcul et les envoyer a l'admin
+
+Date de Maj:            07/11/2025
+Date de Creation: 07/11/2025
+Version: 1.0</Description>
+      <LastUpdatedBy>Kenylen Motean</LastUpdatedBy>
+      <Variables>
+         <Variable>
+            <Name>Erreurs</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>NoErrors</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+      </Variables>
+      <Views/>
+      <WorkFlowTrees/>
+      <DistributionItems>
+         <DistributionItem>
+            <Id>560</Id>
+            <Type>Person</Type>
+            <Name>587e27cf-f278-47f8-8e31-adbc82a751d3</Name>
+            <Description>Kenylen Motean</Description>
+            <SendEmail>False</SendEmail>
+         </DistributionItem>
+         <DistributionItem>
+            <Id>559</Id>
+            <Type>Group</Type>
+            <Name>DistributionIFSContactUs</Name>
+            <Description>Distribution Group for Contact Us Group</Description>
+            <SendEmail>False</SendEmail>
+         </DistributionItem>
+      </DistributionItems>
+      <WorkflowDecisionTables/>
+      <SequentialFlow>
+         <SequenceNumber>0</SequenceNumber>
+         <FlowParts>
+            <FlowPart type="UserTask">
+               <SequenceNumber>1</SequenceNumber>
+               <Name>Envoie Notification</Name>
+               <SummaryMessage>U-010 Recalcul Frais: [NoErrors] erreurs</SummaryMessage>
+               <Priority>Medium</Priority>
+               <IsParallel>False</IsParallel>
+               <TaskActionType>StandardAction</TaskActionType>
+               <UserTaskType>NOTIFICATION</UserTaskType>
+               <MaxEscalationLevel>1</MaxEscalationLevel>
+               <DistributionComplexity>simple</DistributionComplexity>
+               <DistributionItemIds>
+                  <DistributionItemId>560</DistributionItemId>
+                  <DistributionItemId>559</DistributionItemId>
+               </DistributionItemIds>
+               <Parameters>
+                  <Parameter>
+                     <Label>Erreurs</Label>
+                     <VariableName>Erreurs</VariableName>
+                     <ReadOnly>True</ReadOnly>
+                     <SequenceNumber>0</SequenceNumber>
+                     <CompletionProperty>NotApplicable</CompletionProperty>
+                     <Labels/>
+                  </Parameter>
+                  <Parameter>
+                     <Label>Nombre d'erreurs</Label>
+                     <VariableName>NoErrors</VariableName>
+                     <ReadOnly>True</ReadOnly>
+                     <SequenceNumber>1</SequenceNumber>
+                     <CompletionProperty>NotApplicable</CompletionProperty>
+                     <Labels/>
+                  </Parameter>
+               </Parameters>
+               <ActionButtons/>
+               <TaskMessages/>
+               <Escalations/>
+               <WorkflowDecisionTableIds/>
+               <PropagateNotes>False</PropagateNotes>
+            </FlowPart>
+         </FlowParts>
+      </SequentialFlow>
+   </WorkflowDefinition>
+</WorkflowDefinitions>

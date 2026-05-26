@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkflowDefinitions creationDate="2026-05-25T08:46:10Z" versionNumber="2026.05.9.6f185fa">
+   <WorkflowDefinition version="1">
+      <Name>WF_U016_V2</Name>
+      <Description>Dev : U-016
+Date : 12/01/2026
+Evolution: WF_U016_V2
+Date: 11/03/2026</Description>
+      <LastUpdatedBy>Ashley Bheemul</LastUpdatedBy>
+      <Variables>
+         <Variable>
+            <Name>UCA2</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>PUNO</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>PNLI</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>RORL</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>PNLS</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>CONO</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>RORN</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>CBMSGT1</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+      </Variables>
+      <Views/>
+      <WorkFlowTrees/>
+      <DistributionItems>
+         <DistributionItem>
+            <Id>3199</Id>
+            <Type>Person</Type>
+            <Name>a08896a4-2bdf-4970-b5af-ab8742b707b3</Name>
+            <Description>Ashley Bheemul</Description>
+            <SendEmail>False</SendEmail>
+         </DistributionItem>
+      </DistributionItems>
+      <WorkflowDecisionTables/>
+      <SequentialFlow>
+         <SequenceNumber>0</SequenceNumber>
+         <FlowParts>
+            <FlowPart type="Decision">
+               <SequenceNumber>1</SequenceNumber>
+               <Condition>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;Condition version="1.0"&gt;&lt;UsedSubcondition&gt;isOldUCA2Equal0&lt;/UsedSubcondition&gt;&lt;Subconditions&gt;&lt;Subcondition&gt;&lt;Name&gt;isOldUCA2Equal0&lt;/Name&gt;&lt;Type&gt;AttributeValueComparison&lt;/Type&gt;&lt;AttributeName&gt;CBMSGT1&lt;/AttributeName&gt;&lt;ComparisonOperator&gt;Equal&lt;/ComparisonOperator&gt;&lt;Value&gt;0&lt;/Value&gt;&lt;/Subcondition&gt;&lt;/Subconditions&gt;&lt;/Condition&gt;</Condition>
+               <TrueBranch>
+                  <SequentialFlow>
+                     <SequenceNumber>0</SequenceNumber>
+                     <FlowParts/>
+                  </SequentialFlow>
+               </TrueBranch>
+               <FalseBranch>
+                  <SequentialFlow>
+                     <SequenceNumber>0</SequenceNumber>
+                     <FlowParts>
+                        <FlowPart type="UserTask">
+                           <SequenceNumber>2</SequenceNumber>
+                           <Name>OIS100MI.ChgLineBatchEnt</Name>
+                           <SummaryMessage>rorn: [RORN] rorl: [RORL]+ UCA2: [UCA2]</SummaryMessage>
+                           <Priority>Medium</Priority>
+                           <IsParallel>False</IsParallel>
+                           <TaskActionType>StandardAction</TaskActionType>
+                           <UserTaskType>NOTIFICATION</UserTaskType>
+                           <MaxEscalationLevel>1</MaxEscalationLevel>
+                           <DistributionComplexity>simple</DistributionComplexity>
+                           <DistributionItemIds>
+                              <DistributionItemId>3199</DistributionItemId>
+                           </DistributionItemIds>
+                           <Parameters>
+                              <Parameter>
+                                 <Label>UCA2</Label>
+                                 <VariableName>UCA2</VariableName>
+                                 <ReadOnly>True</ReadOnly>
+                                 <SequenceNumber>2</SequenceNumber>
+                                 <CompletionProperty>NotApplicable</CompletionProperty>
+                                 <Labels/>
+                              </Parameter>
+                              <Parameter>
+                                 <Label>RORN</Label>
+                                 <VariableName>RORN</VariableName>
+                                 <ReadOnly>True</ReadOnly>
+                                 <SequenceNumber>0</SequenceNumber>
+                                 <CompletionProperty>NotApplicable</CompletionProperty>
+                                 <Labels/>
+                              </Parameter>
+                              <Parameter>
+                                 <Label>RORL</Label>
+                                 <VariableName>RORL</VariableName>
+                                 <ReadOnly>True</ReadOnly>
+                                 <SequenceNumber>1</SequenceNumber>
+                                 <CompletionProperty>NotApplicable</CompletionProperty>
+                                 <Labels/>
+                              </Parameter>
+                           </Parameters>
+                           <ActionButtons/>
+                           <TaskMessages/>
+                           <Escalations/>
+                           <WorkflowDecisionTableIds/>
+                           <PropagateNotes>False</PropagateNotes>
+                        </FlowPart>
+                        <FlowPart type="IonApiExitPoint">
+                           <SequenceNumber>3</SequenceNumber>
+                           <Name>ChgLineBatchEnt</Name>
+                           <Description>OIS100MI.ChgLineBatchEnt</Description>
+                           <RetryTime>600</RetryTime>
+                           <TimeOut>600</TimeOut>
+                           <IgnoreErrors>False</IgnoreErrors>
+                           <IonApiMethod>{"productLogicalId":"infor.m3","operationProxyPath":"M3/m3api-rest/v2/execute/OIS100MI","operationRestPath":"/ChgLineBatchEnt","productName":"M3","operationPath":"M3/m3api-rest/v2/execute/OIS100MI/ChgLineBatchEnt","summary":"Change CO line on an existing order via batch order entry","httpMethod":"GET","availableOutputContentTypes":["JSON"],"outputContentType":"JSON","input":[{"wfVariableName":"RORN","literalValue":null,"name":"ORNO","description":"Customer order number(10)","swaggerDatatype":"string","swaggerFormat":null,"required":true,"type":"QUERY"},{"wfVariableName":"RORL","literalValue":null,"name":"PONR","description":"Line number(5)","swaggerDatatype":"string","swaggerFormat":null,"required":true,"type":"QUERY"},{"wfVariableName":"CONO","literalValue":null,"name":"CONO","description":"Company(3)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"POSX","description":"Line suffix(3)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"ORQA","description":"Ordered quantity - alternate U/M(16)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"DWDZ","description":"Requested delivery date(10)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"DWHZ","description":"Requested delivery time(4)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"CUOR","description":"Customers order number(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"TEPA","description":"Packaging terms(3)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"CUPA","description":"Customers packaging identity(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"ADID","description":"Address number(6)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"DLSP","description":"Delivery specification(12)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"MODL","description":"Delivery method(3)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"TEDL","description":"Delivery terms(3)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"EDFP","description":"EDIFACT price(18)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"PRHL","description":"Product number highest level(15)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"SERN","description":"Serial number(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"CTNO","description":"Agreement number(10)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"CFGL","description":"Configuration position(15)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"GWTP","description":"Granted warranty type(10)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"WATP","description":"Warranty type(10)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"TECN","description":"Tax exemption contract number(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"INAP","description":"Industry Application(15)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"TEPY","description":"Payment terms(3)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"UCA2","literalValue":null,"name":"JDCD","description":"Joint delivery(5)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"BANO","description":"Lot number(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"RSC6","description":"Transaction reason qty(3)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"RSC7","description":"Transaction reason time(3)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"RSCD","description":"Transaction reason(3)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCA1","description":"User-defined alpha field 1(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCA2","description":"User-defined alpha field 2(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCA3","description":"User-defined alpha field 3(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCA4","description":"User-defined alpha field 4(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCA5","description":"User-defined alpha field 5(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCA6","description":"User-defined alpha field 6(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCA7","description":"User-defined alpha field 7(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCA8","description":"User-defined alpha field 8(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCA9","description":"User-defined alpha field 9(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCA0","description":"User-defined alpha field 10(20)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UDN1","description":"User-defined numeric 1(19)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UDN2","description":"User-defined numeric 2(19)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UDN3","description":"User-defined numeric 3(19)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UDN4","description":"User-defined numeric 4(19)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UDN5","description":"User-defined numeric 5(19)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UDN6","description":"User-defined numeric 6(19)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UID1","description":"User-defined date 1(10)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UID2","description":"User-defined date 2(10)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UID3","description":"User-defined date 3(10)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"UCT1","description":"User-defined text field 1(128)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"SMCD","description":"Salesperson(10)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"CONO","literalValue":null,"name":"cono","description":"The company context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"divi","description":"The division context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"lanc","description":"The language code to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"locale","description":"The locale to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"timeZone","description":"The time zone to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"dateformat","description":"Date format to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"excludeempty","description":"When true, empty fields are omitted in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"righttrim","description":"When true, all values are right trimmed in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"format","description":"Controls output JSON format","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"extendedresult","description":"Show transaction parameters in the response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"positionkey","description":"The position in a table to start reading from","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"}],"output":[],"inputBody":{"name":null,"description":null,"required":false,"availableInputContentTypes":[],"inputContentType":null,"body":" ","ignore":true,"structureNamesFromBody":[],"variableNamesFromBody":[]}}</IonApiMethod>
+                           <IsCustom>False</IsCustom>
+                        </FlowPart>
+                        <FlowPart type="IonApiExitPoint">
+                           <SequenceNumber>1</SequenceNumber>
+                           <Name>GetLine</Name>
+                           <Description>PPS200MI.GetLine</Description>
+                           <RetryTime>600</RetryTime>
+                           <TimeOut>600</TimeOut>
+                           <IgnoreErrors>False</IgnoreErrors>
+                           <IonApiMethod>{"productLogicalId":"infor.m3","operationProxyPath":"M3/m3api-rest/v2/execute/PPS200MI","operationRestPath":"/GetLine","productName":"M3","operationPath":"M3/m3api-rest/v2/execute/PPS200MI/GetLine","summary":"Get a purchase order line","httpMethod":"GET","availableOutputContentTypes":["JSON"],"outputContentType":"JSON","input":[{"wfVariableName":"PUNO","literalValue":null,"name":"PUNO","description":"Purchase order number(10)","swaggerDatatype":"string","swaggerFormat":null,"required":true,"type":"QUERY"},{"wfVariableName":"CONO","literalValue":null,"name":"CONO","description":"Company(3)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"PNLI","literalValue":null,"name":"PNLI","description":"Purchase order line(3)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"PNLS","literalValue":null,"name":"PNLS","description":"Purchase order line subnumber(3)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":"CONO","literalValue":null,"name":"cono","description":"The company context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"divi","description":"The division context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"lanc","description":"The language code to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"locale","description":"The locale to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"timeZone","description":"The time zone to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"dateformat","description":"Date format to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"excludeempty","description":"When true, empty fields are omitted in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"righttrim","description":"When true, all values are right trimmed in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"format","description":"Controls output JSON format","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"extendedresult","description":"Show transaction parameters in the response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"positionkey","description":"The position in a table to start reading from","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"}],"output":[{"wfVariableName":"UCA2","type":"BODY","path":"$.results[0].records[0].UCA2","optional":false},{"wfVariableName":"RORN","type":"BODY","path":"$.results[0].records[0].RORN","optional":false},{"wfVariableName":"RORL","type":"BODY","path":"$.results[0].records[0].RORL","optional":false}],"inputBody":{"name":null,"description":null,"required":false,"availableInputContentTypes":[],"inputContentType":null,"body":" ","ignore":true,"structureNamesFromBody":[],"variableNamesFromBody":[]}}</IonApiMethod>
+                           <IsCustom>False</IsCustom>
+                        </FlowPart>
+                     </FlowParts>
+                  </SequentialFlow>
+               </FalseBranch>
+            </FlowPart>
+         </FlowParts>
+      </SequentialFlow>
+   </WorkflowDefinition>
+</WorkflowDefinitions>

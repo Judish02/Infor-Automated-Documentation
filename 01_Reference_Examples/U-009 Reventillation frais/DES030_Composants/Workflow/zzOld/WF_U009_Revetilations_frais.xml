@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WorkflowDefinitions creationDate="2026-01-09T10:26:39Z" versionNumber="2025.12.11.167b317">
+   <WorkflowDefinition version="1">
+      <Name>WF_U009_Revetilations_frais</Name>
+      <Description>Reventilations frais ligne factures APS451
+Creation Date: 09/01/2026
+Version: 1.2</Description>
+      <LastUpdatedBy>Kenylen Motean</LastUpdatedBy>
+      <Variables>
+         <Variable>
+            <Name>CEID</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>CDSE</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>SUCL</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>APIFlowOutput</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>CHGT</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>DIVI</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>NLAM</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>INBN</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>IVQA</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>SUNO</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>False</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+         <Variable>
+            <Name>TRNO</Name>
+            <DataType>String</DataType>
+            <IsWorkflowInput>True</IsWorkflowInput>
+            <IsWorkflowOutput>False</IsWorkflowOutput>
+            <IsUseValue>False</IsUseValue>
+         </Variable>
+      </Variables>
+      <Views/>
+      <WorkFlowTrees/>
+      <DistributionItems>
+         <DistributionItem>
+            <Id>1673</Id>
+            <Type>Person</Type>
+            <Name>de2c92c3-7028-4e25-a908-919fbdc5015c</Name>
+            <Description>Mathieu Delmas</Description>
+            <SendEmail>False</SendEmail>
+         </DistributionItem>
+         <DistributionItem>
+            <Id>1674</Id>
+            <Type>Person</Type>
+            <Name>587e27cf-f278-47f8-8e31-adbc82a751d3</Name>
+            <Description>Kenylen Motean</Description>
+            <SendEmail>False</SendEmail>
+         </DistributionItem>
+      </DistributionItems>
+      <WorkflowDecisionTables/>
+      <SequentialFlow>
+         <SequenceNumber>0</SequenceNumber>
+         <FlowParts>
+            <FlowPart type="Decision">
+               <SequenceNumber>3</SequenceNumber>
+               <Condition>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;Condition version="1.0"&gt;&lt;UsedSubcondition&gt;isSUCLEqualTRA&lt;/UsedSubcondition&gt;&lt;Subconditions&gt;&lt;Subcondition&gt;&lt;Name&gt;isSUCLEqualTRA&lt;/Name&gt;&lt;Type&gt;AttributeValueComparison&lt;/Type&gt;&lt;AttributeName&gt;SUCL&lt;/AttributeName&gt;&lt;ComparisonOperator&gt;Equal&lt;/ComparisonOperator&gt;&lt;Value&gt;TRA&lt;/Value&gt;&lt;/Subcondition&gt;&lt;/Subconditions&gt;&lt;/Condition&gt;</Condition>
+               <TrueBranch>
+                  <SequentialFlow>
+                     <SequenceNumber>0</SequenceNumber>
+                     <FlowParts>
+                        <FlowPart type="Decision">
+                           <SequenceNumber>2</SequenceNumber>
+                           <Condition>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;Condition version="1.0"&gt;&lt;UsedSubcondition&gt;hasAnErrorOccured&lt;/UsedSubcondition&gt;&lt;Subconditions&gt;&lt;Subcondition&gt;&lt;Name&gt;hasAnErrorOccured&lt;/Name&gt;&lt;Type&gt;AttributeValueComparison&lt;/Type&gt;&lt;AttributeName&gt;APIFlowOutput&lt;/AttributeName&gt;&lt;ComparisonOperator&gt;Contains&lt;/ComparisonOperator&gt;&lt;Value&gt;ErrorMessage&lt;/Value&gt;&lt;/Subcondition&gt;&lt;/Subconditions&gt;&lt;/Condition&gt;</Condition>
+                           <TrueBranch>
+                              <SequentialFlow>
+                                 <SequenceNumber>0</SequenceNumber>
+                                 <FlowParts>
+                                    <FlowPart type="UserTask">
+                                       <SequenceNumber>1</SequenceNumber>
+                                       <Name>Send Error Message</Name>
+                                       <SummaryMessage>Erreur reventilation pour facture [INBN]</SummaryMessage>
+                                       <Priority>Medium</Priority>
+                                       <IsParallel>False</IsParallel>
+                                       <TaskActionType>StandardAction</TaskActionType>
+                                       <UserTaskType>NOTIFICATION</UserTaskType>
+                                       <MaxEscalationLevel>1</MaxEscalationLevel>
+                                       <DistributionComplexity>simple</DistributionComplexity>
+                                       <DistributionItemIds>
+                                          <DistributionItemId>1673</DistributionItemId>
+                                          <DistributionItemId>1674</DistributionItemId>
+                                       </DistributionItemIds>
+                                       <Parameters>
+                                          <Parameter>
+                                             <Label>Numéro Facture</Label>
+                                             <VariableName>INBN</VariableName>
+                                             <ReadOnly>True</ReadOnly>
+                                             <SequenceNumber>1</SequenceNumber>
+                                             <CompletionProperty>NotApplicable</CompletionProperty>
+                                             <Labels/>
+                                          </Parameter>
+                                          <Parameter>
+                                             <Label>Messages Erreurs</Label>
+                                             <VariableName>APIFlowOutput</VariableName>
+                                             <ReadOnly>True</ReadOnly>
+                                             <SequenceNumber>0</SequenceNumber>
+                                             <CompletionProperty>NotApplicable</CompletionProperty>
+                                             <Labels/>
+                                          </Parameter>
+                                          <Parameter>
+                                             <Label>Numéro de transaction</Label>
+                                             <VariableName>TRNO</VariableName>
+                                             <ReadOnly>True</ReadOnly>
+                                             <SequenceNumber>2</SequenceNumber>
+                                             <CompletionProperty>NotApplicable</CompletionProperty>
+                                             <Labels/>
+                                          </Parameter>
+                                       </Parameters>
+                                       <ActionButtons/>
+                                       <TaskMessages/>
+                                       <Escalations/>
+                                       <WorkflowDecisionTableIds/>
+                                       <PropagateNotes>False</PropagateNotes>
+                                    </FlowPart>
+                                 </FlowParts>
+                              </SequentialFlow>
+                           </TrueBranch>
+                           <FalseBranch>
+                              <SequentialFlow>
+                                 <SequenceNumber>0</SequenceNumber>
+                                 <FlowParts/>
+                              </SequentialFlow>
+                           </FalseBranch>
+                        </FlowPart>
+                        <FlowPart type="IonApiExitPoint">
+                           <SequenceNumber>1</SequenceNumber>
+                           <Name>Call Reventilation Frais</Name>
+                           <RetryTime>600</RetryTime>
+                           <TimeOut>600</TimeOut>
+                           <IgnoreErrors>False</IgnoreErrors>
+                           <IonApiMethod>{"productLogicalId":"inforos.apiflows","operationProxyPath":"APIFLOWS/u009","operationRestPath":"/Reventillation","productName":"Infor API Flows","operationPath":"APIFLOWS/u009/Reventillation","summary":"","httpMethod":"GET","availableOutputContentTypes":["JSON"],"outputContentType":"JSON","input":[{"wfVariableName":"INBN","literalValue":null,"name":"headInvoiceNumber","description":null,"swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"},{"wfVariableName":"DIVI","literalValue":null,"name":"division","description":null,"swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"},{"wfVariableName":"INBN","literalValue":null,"name":"lineInvoiceNumber","description":null,"swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"},{"wfVariableName":"CEID","literalValue":null,"name":"costingElem","description":null,"swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"},{"wfVariableName":"NLAM","literalValue":null,"name":"grossAmount","description":null,"swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"},{"wfVariableName":"IVQA","literalValue":null,"name":"invoiceQty","description":null,"swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"},{"wfVariableName":"CDSE","literalValue":null,"name":"seqNumber","description":null,"swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"},{"wfVariableName":"TRNO","literalValue":null,"name":"transNo","description":null,"swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"},{"wfVariableName":"CHGT","literalValue":null,"name":"chargeText","description":null,"swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"},{"wfVariableName":null,"literalValue":null,"name":"ionapiRespStyle","description":"Indicate to execute synchronously or asynchronously","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"}],"output":[{"wfVariableName":"APIFlowOutput","type":"BODY","path":"$","optional":false}],"inputBody":{"name":null,"description":null,"required":false,"availableInputContentTypes":[],"inputContentType":null,"body":" ","ignore":true,"structureNamesFromBody":[],"variableNamesFromBody":[]}}</IonApiMethod>
+                           <IsCustom>False</IsCustom>
+                        </FlowPart>
+                     </FlowParts>
+                  </SequentialFlow>
+               </TrueBranch>
+               <FalseBranch>
+                  <SequentialFlow>
+                     <SequenceNumber>0</SequenceNumber>
+                     <FlowParts/>
+                  </SequentialFlow>
+               </FalseBranch>
+            </FlowPart>
+            <FlowPart type="IonApiExitPoint">
+               <SequenceNumber>1</SequenceNumber>
+               <Name>GetHead</Name>
+               <Description>Recuperation SUNO depuis FAPIBH</Description>
+               <RetryTime>600</RetryTime>
+               <TimeOut>600</TimeOut>
+               <IgnoreErrors>False</IgnoreErrors>
+               <IonApiMethod>{"productLogicalId":"infor.m3","operationProxyPath":"M3/m3api-rest/v2/execute/APS450MI","operationRestPath":"/GetHead","productName":"M3","operationPath":"M3/m3api-rest/v2/execute/APS450MI/GetHead","summary":"Get invoice batch head","httpMethod":"GET","availableOutputContentTypes":["JSON"],"outputContentType":"JSON","input":[{"wfVariableName":"INBN","literalValue":null,"name":"INBN","description":"Invoice batch number(10)","swaggerDatatype":"number","swaggerFormat":null,"required":true,"type":"QUERY"},{"wfVariableName":"DIVI","literalValue":null,"name":"DIVI","description":"Division(3)","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"cono","description":"The company context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"divi","description":"The division context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"lanc","description":"The language code to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"locale","description":"The locale to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"timeZone","description":"The time zone to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"dateformat","description":"Date format to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"excludeempty","description":"When true, empty fields are omitted in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"righttrim","description":"When true, all values are right trimmed in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"format","description":"Controls output JSON format","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"extendedresult","description":"Show transaction parameters in the response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"positionkey","description":"The position in a table to start reading from","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"}],"output":[{"wfVariableName":"SUNO","type":"BODY","path":"$.results[0].records[0].SUNO","optional":false}],"inputBody":{"name":null,"description":null,"required":false,"availableInputContentTypes":[],"inputContentType":null,"body":" ","ignore":true,"structureNamesFromBody":[],"variableNamesFromBody":[]}}</IonApiMethod>
+               <IsCustom>False</IsCustom>
+            </FlowPart>
+            <FlowPart type="IonApiExitPoint">
+               <SequenceNumber>2</SequenceNumber>
+               <Name>GetBasicData_CRS620MI</Name>
+               <Description>Recuperation SUCL depuis CIDVEN</Description>
+               <RetryTime>600</RetryTime>
+               <TimeOut>600</TimeOut>
+               <IgnoreErrors>False</IgnoreErrors>
+               <IonApiMethod>{"productLogicalId":"infor.m3","operationProxyPath":"M3/m3api-rest/v2/execute/CRS620MI","operationRestPath":"/GetBasicData","productName":"M3","operationPath":"M3/m3api-rest/v2/execute/CRS620MI/GetBasicData","summary":"Retrieve supplier basic data","httpMethod":"GET","availableOutputContentTypes":["JSON"],"outputContentType":"JSON","input":[{"wfVariableName":"SUNO","literalValue":null,"name":"SUNO","description":"Supplier number(10)","swaggerDatatype":"string","swaggerFormat":null,"required":true,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"CONO","description":"Company(3)","swaggerDatatype":"number","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"cono","description":"The company context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"divi","description":"The division context to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"lanc","description":"The language code to use. Defaults to user default","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"locale","description":"The locale to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"timeZone","description":"The time zone to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"dateformat","description":"Date format to use","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"excludeempty","description":"When true, empty fields are omitted in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"righttrim","description":"When true, all values are right trimmed in response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"format","description":"Controls output JSON format","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"extendedresult","description":"Show transaction parameters in the response","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"QUERY"},{"wfVariableName":null,"literalValue":null,"name":"positionkey","description":"The position in a table to start reading from","swaggerDatatype":"string","swaggerFormat":null,"required":false,"type":"HEADER"}],"output":[{"wfVariableName":"SUCL","type":"BODY","path":"$.results[0].records[0].SUCL","optional":false}],"inputBody":{"name":null,"description":null,"required":false,"availableInputContentTypes":[],"inputContentType":null,"body":" ","ignore":true,"structureNamesFromBody":[],"variableNamesFromBody":[]}}</IonApiMethod>
+               <IsCustom>False</IsCustom>
+            </FlowPart>
+         </FlowParts>
+      </SequentialFlow>
+   </WorkflowDefinition>
+</WorkflowDefinitions>

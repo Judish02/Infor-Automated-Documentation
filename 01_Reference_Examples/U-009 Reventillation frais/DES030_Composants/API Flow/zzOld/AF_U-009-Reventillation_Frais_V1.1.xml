@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApiFlows creationDate="2026-01-21T11:31:30Z" version="2026.01.9.17d4ce0">
+   <ApiFlow>
+      <Name>AF_U-009-Reventillation_Frais</Name>
+      <Description>Reventilation frais au prorata volume ou montant
+Creation Date: 19/12/2025
+Updated Date: 20/01/2026
+Version: 1.3</Description>
+      <LastUpdatedBy>Kenylen Motean</LastUpdatedBy>
+      <LastUpdatedOn>2026-01-21 11:10:21.093</LastUpdatedOn>
+      <FlowVersion>1</FlowVersion>
+      <SchemaVersion>2</SchemaVersion>
+      <Operation>{"productName":null,"productLogicalid":null,"method":"GET","path":"u009/Reventillation","proxyPath":"u009","restPath":"Reventillation","endpointName":"u009","resourceName":"u009","description":null,"inputContentTypes":["JSON"],"outputContentTypes":["JSON"],"inputParameters":[{"name":"headInvoiceNumber","description":null,"type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"division","description":null,"type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"lineInvoiceNumber","description":null,"type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"costingElem","description":null,"type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"grossAmount","description":null,"type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"invoiceQty","description":null,"type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"seqNumber","description":null,"type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"transNo","description":null,"type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"chargeText","description":null,"type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null}],"inputContentType":"JSON","outputContentType":"JSON","outputParameters":[{"name":null,"description":null,"type":"BODY","path":null,"value":"{\n\"AddLine\":\"${AddInvoiceLines.APS450MI_AddLine}\",\n\"prepareAddLine\":\"${CalculateProrata.output}\"\n}"}]}</Operation>
+      <Variables>{"$_InternalApiFlowReservedKeys_status":"200"}</Variables>
+      <FlowPart>
+         <FlowPartContainer>
+            <SequenceNumber>0</SequenceNumber>
+            <FlowPartContainerType>START_END</FlowPartContainerType>
+            <FlowParts>
+               <FlowPart>
+                  <FlowPartContainer>
+                     <SequenceNumber>0</SequenceNumber>
+                     <FlowPartContainerType>SEQUENTIAL_FLOW</FlowPartContainerType>
+                     <FlowParts>
+                        <FlowPart>
+                           <FlowPartContainer>
+                              <SequenceNumber>0</SequenceNumber>
+                              <FlowPartContainerType>PARALLEL_FLOW</FlowPartContainerType>
+                              <FlowParts>
+                                 <FlowPart>
+                                    <FlowPartContainer>
+                                       <SequenceNumber>0</SequenceNumber>
+                                       <FlowPartContainerType>SEQUENTIAL_FLOW</FlowPartContainerType>
+                                       <FlowParts>
+                                          <FlowPart>
+                                             <Activity>
+                                                <SequenceNumber>0</SequenceNumber>
+                                                <Name>GetConteneurs</Name>
+                                                <Description>Obtenir les informations des conteneur depuis la table FAPIBA</Description>
+                                                <ActivityType>ION_API</ActivityType>
+                                                <Operation>{"productName":"Infor M3","productLogicalid":"infor.m3","method":"GET","path":"M3/m3api-rest/v2/execute/EXPORTMI/Select","proxyPath":"M3/m3api-rest/v2/execute/EXPORTMI","restPath":"/Select","endpointName":null,"resourceName":null,"description":null,"inputContentTypes":[],"outputContentTypes":["JSON"],"inputParameters":[{"name":"QERY","description":"Query statement(982)","type":"QUERY","dataType":"string","required":true,"schema":null,"example":null,"value":"E7PEXI from FAPIBA where INBN = '${input.headInvoiceNumber}' and PEXN = '412'","path":null},{"name":"SEPC","description":"Separator character or blank for flat file(1)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":";","path":null},{"name":"HDRS","description":"Include headers, 1 or 0 or blank(1)","type":"QUERY","dataType":"number","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"cono","description":"The company context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"divi","description":"The division context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"lanc","description":"The language code to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"locale","description":"The locale to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"timeZone","description":"The time zone to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"dateformat","description":"Date format to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"excludeempty","description":"When true, empty fields are omitted in response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"righttrim","description":"When true, all values are right trimmed in response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"format","description":"Controls output JSON format","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"extendedresult","description":"Show transaction parameters in the response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"positionkey","description":"The position in a table to start reading from","type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null}],"inputContentType":null,"outputContentType":"JSON","outputParameters":[{"name":"EXPORTMI_FAPIBA","description":null,"type":"BODY","path":null,"value":null}]}</Operation>
+                                             </Activity>
+                                          </FlowPart>
+                                          <FlowPart>
+                                             <Activity>
+                                                <SequenceNumber>1</SequenceNumber>
+                                                <Name>Prepare_GetLignesOA</Name>
+                                                <Description>Creation json pour appelle API en bulk pour recuperer les lignes OA depuis MPLINE ou UCA1 = No conteneur</Description>
+                                                <ActivityType>JQ</ActivityType>
+                                                <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                                                <JQTransformParameterValue>"${GetConteneurs.EXPORTMI_FAPIBA}"</JQTransformParameterValue>
+                                                <JQScript># Prepare bulk EXPORTMI.Select for MPLINE table using FAPIBA data
+# Input: EXPORTMI_FAPIBA response
+# Output: Bulk EXPORTMI.Select requests for MPLINE where UCA1 equals each REPL from FAPIBA
+
+{
+  program: "EXPORTMI",
+  transactions: [
+    .results[] | .records[] |
+    {
+      transaction: "Select",
+      record: {
+        SEPC: ";",
+        QERY: "IBPUNO, IBPNLI, IBPNLS, IBUDN1, IBRVQA from MPLINE where IBUCA1 = '\(.REPL)' and IBPUSL &lt; 85"
+      }
+    }
+  ]
+}
+</JQScript>
+                                             </Activity>
+                                          </FlowPart>
+                                          <FlowPart>
+                                             <Activity>
+                                                <SequenceNumber>2</SequenceNumber>
+                                                <Name>GetPOLines</Name>
+                                                <Description>Recuperation lignes OA depuis table MPLINE ou UCA1 = No Conteneurs</Description>
+                                                <ActivityType>ION_API</ActivityType>
+                                                <Operation>{"productName":"Infor M3","productLogicalid":"infor.m3","method":"POST","path":"M3/m3api-rest/v2/execute","proxyPath":"M3/m3api-rest/v2","restPath":"/execute","endpointName":null,"resourceName":null,"description":null,"inputContentTypes":["JSON"],"outputContentTypes":["JSON"],"inputParameters":[{"name":"cono","description":"The company context to use. Defaults to user default","type":"QUERY","dataType":"integer","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"divi","description":"The division context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"lanc","description":"The language code to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"locale","description":"Locale to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"timeZone","description":"Time zone to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","type":"QUERY","dataType":"integer","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"dateformat","description":"Date format to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"excludempty","description":"When true, empty fields are omitted in response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"righttrim","description":"When true, all values are right trimmed in response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"format","description":"Controls output JSON format","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"extendedresult","description":"Show transaction parameters in the response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"positionkey","description":"Position to start reading from","type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"body","description":"Since the request body is processed in a streaming fashion, ordering of attributes must be taken into account - the \"transactions\" attribute must be the last attribute of the request.","type":"BODY","dataType":null,"required":true,"schema":null,"example":null,"value":"${Prepare_GetLignesOA.output}","path":null}],"inputContentType":"JSON","outputContentType":"JSON","outputParameters":[{"name":"EXPORTMI_MPLINE","description":null,"type":"BODY","path":null,"value":null}]}</Operation>
+                                             </Activity>
+                                          </FlowPart>
+                                          <FlowPart>
+                                             <Activity>
+                                                <SequenceNumber>3</SequenceNumber>
+                                                <Name>RecuperationErreurMPLINE</Name>
+                                                <Description>Recuperation des erreur API: No Conteneur non retrouver ou Volume Ligne OA = 0 </Description>
+                                                <ActivityType>JQ</ActivityType>
+                                                <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                                                <JQTransformParameterValue>{
+"response":"${GetPOLines.EXPORTMI_MPLINE}",
+"request":"${Prepare_GetLignesOA.output}"
+}</JQTransformParameterValue>
+                                                <JQScript># Validate EXPORTMI MPLINE response and create error messages for empty, error, or zero volume records
+# Input: { request: prepareMPLINESelect request, response: EXPORTMI_MPLINE response }
+# Output: Array of error messages for queries that failed, returned no records, or have zero volume
+
+.request.transactions as $requests |
+.response.results as $results |
+
+[
+  range($results | length) as $idx |
+  $results[$idx] as $result |
+  $requests[$idx] as $request |
+  
+  # Extract UCA1 (container) from query for error message
+  ($request.record.QERY | 
+    match("IBUCA1\\s*=\\s*'([^']+)'").captures[0].string) as $container |
+  
+  # Check if the result has an errorMessage field
+  if $result.errorMessage != null and $result.errorMessage != "" then
+    {
+      container: $container,
+      errorMessage: "Erreur lors de la recuperation numero lignes OA pour le conteneur: \($container) - \($result.errorMessage)"
+    }
+  # Check if the response has no records
+  elif ($result.records | length) == 0 then
+    {
+      container: $container,
+      errorMessage: "Aucun enregistrement trouvé dans la recuperation numero lignes OA pour le conteneur: \($container)"
+    }
+  else
+    # Check each record for zero volume (4th field in REPL: PUNO;PNLI;PNLS;UDN1)
+    (
+      $result.records[] |
+      (.REPL | split(";")) as $fields |
+      $fields[0] as $puno |
+      $fields[1] as $pnli |
+      $fields[2] as $pnls |
+      ($fields[3] | tonumber) as $volume |
+      
+      if $volume == 0 then
+        {
+          Conteneur: $container,
+          PUNO: $puno,
+          PNLI: $pnli,
+          PNLS: $pnls,
+          Message: "Le volume est zéro pour le conteneur: \($container), OA: \($puno), Ligne: \($pnli), Suffixe: \($pnls)"
+        }
+      else
+        empty
+      end
+    )
+  end
+]
+</JQScript>
+                                             </Activity>
+                                          </FlowPart>
+                                       </FlowParts>
+                                    </FlowPartContainer>
+                                 </FlowPart>
+                                 <FlowPart>
+                                    <FlowPartContainer>
+                                       <SequenceNumber>1</SequenceNumber>
+                                       <FlowPartContainerType>SEQUENTIAL_FLOW</FlowPartContainerType>
+                                       <FlowParts>
+                                          <FlowPart>
+                                             <Activity>
+                                                <SequenceNumber>0</SequenceNumber>
+                                                <Name>CUSEXTMI_GetFieldValue</Name>
+                                                <Description>Recuperer le champ CUGEX1 pour les ligne frais dans la facture </Description>
+                                                <ActivityType>ION_API</ActivityType>
+                                                <Operation>{"productName":"Infor M3","productLogicalid":"infor.m3","method":"GET","path":"M3/m3api-rest/v2/execute/CUSEXTMI/GetFieldValue","proxyPath":"M3/m3api-rest/v2/execute/CUSEXTMI","restPath":"/GetFieldValue","endpointName":null,"resourceName":null,"description":null,"inputContentTypes":[],"outputContentTypes":["JSON"],"inputParameters":[{"name":"FILE","description":"Table(10)","type":"QUERY","dataType":"string","required":true,"schema":null,"example":null,"value":"MPCELE","path":null},{"name":"PK01","description":"Primary key 1(30)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":"${input.costingElem}","path":null},{"name":"PK02","description":"Primary key 2(30)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"PK03","description":"Primary key 3(30)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"PK04","description":"Primary key 4(30)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"PK05","description":"Primary key 5(30)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"PK06","description":"Primary key 6(30)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"PK07","description":"Primary key 7(30)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"PK08","description":"Primary key 8(30)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"cono","description":"The company context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"divi","description":"The division context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"lanc","description":"The language code to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"locale","description":"The locale to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"timeZone","description":"The time zone to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"dateformat","description":"Date format to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"excludeempty","description":"When true, empty fields are omitted in response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"righttrim","description":"When true, all values are right trimmed in response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"returncols","description":"A comma separated list of column names that should be included in the response. Defaults to all columns","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"format","description":"Controls output JSON format","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"extendedresult","description":"Show transaction parameters in the response","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"positionkey","description":"The position in a table to start reading from","type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null}],"inputContentType":null,"outputContentType":"JSON","outputParameters":[{"name":"CUSEXTMI_GetFieldValue","description":null,"type":"BODY","path":null,"value":null}]}</Operation>
+                                             </Activity>
+                                          </FlowPart>
+                                       </FlowParts>
+                                    </FlowPartContainer>
+                                 </FlowPart>
+                              </FlowParts>
+                           </FlowPartContainer>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>1</SequenceNumber>
+                              <Name>VerificationErreurAPI</Name>
+                              <Description>Verification si erreur recuperation ligne OA </Description>
+                              <ActivityType>CBR_FILTER</ActivityType>
+                              <FilterExpression>if ($.erreur.length == 0) 'Yes'; else 'No'</FilterExpression>
+                              <FilterWorkflowOutput>{"terminateOutput":"{\n\"ErrorMessage\":\"${RecuperationErreurMPLINE.output}\"\n}","status":200}</FilterWorkflowOutput>
+                              <FilterParameters>
+                                 <FilterParameter>
+                                    <Name>erreur</Name>
+                                    <FilterParameterValue>${RecuperationErreurMPLINE.output}</FilterParameterValue>
+                                 </FilterParameter>
+                              </FilterParameters>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>2</SequenceNumber>
+                              <Name>Prepare_GetMontant</Name>
+                              <Description>Recuperation montant de ligne OA dans MPOEXP ou CEID = costing elem</Description>
+                              <ActivityType>JQ</ActivityType>
+                              <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                              <JQTransformParameterValue>{
+"ceid":"${input.costingElem}",
+"POLines":"${GetPOLines.EXPORTMI_MPLINE}",
+"CUSEXTMI":"${CUSEXTMI_GetFieldValue.CUSEXTMI_GetFieldValue}"
+}
+</JQTransformParameterValue>
+                              <JQScript># Prepare bulk EXPORTMI.Select for MPOEXP table using PDNLIN data
+# Input: { ceid: "value", POLines: EXPORTMI_PDNLIN, CUSEXTMI: CUSEXTMI_GetFieldValue }
+# Fields from PDNLIN (split by ;): ILRIDN (PUNO), ILRIDL (PNLI), ILRIDX (PNLS), ILDLQA, ILWHLO, ILSUNO, ILDNDT, ILSUDO, ILITNO
+# Only create requests if CUSEXTMI A030 field equals empty string
+
+# Extract A030 value from CUSEXTMI response
+(.CUSEXTMI.results[0].records[0].A030 // "") as $a030 |
+.ceid as $ceid |
+
+# Split each REPL value by semicolon and create MPOEXP queries only if A030 is empty
+{
+  program: "EXPORTMI",
+  transactions: (
+    if $a030 == "B" then
+      [
+        .POLines.results[] | .records[] | 
+        (.REPL | split(";")) as $fields |
+        {
+          transaction: "Select",
+          record: {
+            SEPC: ";",
+            QERY: "IVPUNO, IVPNLI, IVPNLS, IVCEVA from MPOEXP where IVPUNO = '\($fields[0])' and IVPNLI = '\($fields[1])' and IVPNLS = '\($fields[2])' and IVCEID = '\($ceid)'"
+          }
+        }
+      ]
+    else
+      []
+    end
+  )
+}
+</JQScript>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>3</SequenceNumber>
+                              <Name>GetPOMontant</Name>
+                              <Description>Recuperation montant table MPOEXP</Description>
+                              <ActivityType>ION_API</ActivityType>
+                              <Operation>{"productName":"Infor M3","productLogicalid":"infor.m3","method":"POST","path":"M3/m3api-rest/v2/execute","proxyPath":"M3/m3api-rest/v2","restPath":"/execute","endpointName":null,"resourceName":null,"description":null,"inputContentTypes":["JSON"],"outputContentTypes":["JSON"],"inputParameters":[{"name":"cono","description":"The company context to use. Defaults to user default","type":"QUERY","dataType":"integer","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"divi","description":"The division context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"lanc","description":"The language code to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"locale","description":"Locale to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"timeZone","description":"Time zone to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","type":"QUERY","dataType":"integer","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"dateformat","description":"Date format to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"excludempty","description":"When true, empty fields are omitted in response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"righttrim","description":"When true, all values are right trimmed in response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"format","description":"Controls output JSON format","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"extendedresult","description":"Show transaction parameters in the response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"positionkey","description":"Position to start reading from","type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"body","description":"Since the request body is processed in a streaming fashion, ordering of attributes must be taken into account - the \"transactions\" attribute must be the last attribute of the request.","type":"BODY","dataType":null,"required":true,"schema":null,"example":null,"value":"${Prepare_GetMontant.output}","path":null}],"inputContentType":"JSON","outputContentType":"JSON","outputParameters":[{"name":"EXPORTMI_MPOEXP","description":null,"type":"BODY","path":null,"value":null}]}</Operation>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>4</SequenceNumber>
+                              <Name>DelLine</Name>
+                              <Description>Appel API APS450MI.DltLine pour supprimer ligne sur APS451</Description>
+                              <ActivityType>ION_API</ActivityType>
+                              <Operation>{"productName":"M3","productLogicalid":"infor.m3","method":"GET","path":"M3/m3api-rest/execute/APS450MI/DltLine","proxyPath":"M3/m3api-rest/execute/APS450MI","restPath":"/DltLine","endpointName":null,"resourceName":null,"description":null,"inputContentTypes":[],"outputContentTypes":["JSON"],"inputParameters":[{"name":"DIVI","description":"Division(3)","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":"${input.division}","path":null},{"name":"INBN","description":"Invoice batch number(10)","type":"QUERY","dataType":"number","required":true,"schema":null,"example":null,"value":"${input.lineInvoiceNumber}","path":null},{"name":"TRNO","description":"Transaction number(7)","type":"QUERY","dataType":"number","required":true,"schema":null,"example":null,"value":"${input.transNo}","path":null}],"inputContentType":null,"outputContentType":"JSON","outputParameters":[{"name":"APS450MI_DltLine","description":null,"type":"BODY","path":null,"value":null}]}</Operation>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>5</SequenceNumber>
+                              <Name>CalculateProrata</Name>
+                              <Description>Calcul du prorata gross price pour l'ajout des lignes sur APS451</Description>
+                              <Optional>False</Optional>
+                              <ActivityType>JQ</ActivityType>
+                              <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                              <JQTransformParameterValue>{
+"CUSEXTMI":"${CUSEXTMI_GetFieldValue.CUSEXTMI_GetFieldValue}",
+"POMontants":"${GetPOMontant.EXPORTMI_MPOEXP}",
+"POLines":"${GetPOLines.EXPORTMI_MPLINE}",
+"inputGrossPrice":"${input.grossAmount}",
+"invoicedAmount":"${input.invoiceQty}",
+"invoiceNumber":"${input.lineInvoiceNumber}",
+"division":"${input.division}",
+"chargeText":"${input.chargeText}"
+}</JQTransformParameterValue>
+                              <JQScript># Calculate prorata of gross price based on CUSEXTMI A030 field:
+# A030 = "A" -&gt; use Volume from MPLINE (UDN1 field)
+# A030 = "B" -&gt; use Montant from MPOEXP
+# Otherwise -&gt; return empty transactions
+# Input: { CUSEXTMI: CUSEXTMI_GetFieldValue, POMontants: EXPORTMI_MPOEXP, POLines: EXPORTMI_MPLINE, inputGrossPrice, invoicedAmount, invoiceNumber, division, chargeText }
+# REPL format for MPLINE: PUNO;PNLI;PNLS;UDN1 (volume)
+# REPL format for MPOEXP: PUNO;PNLI;PNLS;amount
+
+# Get A030 value from CUSEXTMI
+(.CUSEXTMI.results[0].records[0].A030 // "") as $a030 |
+
+# Get input parameters
+(.inputGrossPrice | tonumber) as $grossPrice |
+.invoiceNumber as $inbn |
+.division as $divi |
+.chargeText as $chargeText |
+
+# Extract RVQA from POLines (MPLINE) - field index 3 (UDN1)
+([.POLines.results[] | .records[] | (.REPL | split(";")[4])]) as $rvqaList |
+
+# Extract records based on A030 value
+# A030 = "A" -&gt; use MPLINE volume data
+# A030 = "B" -&gt; use MPOEXP amount data
+# Otherwise -&gt; empty array
+(
+  if $a030 == "A" then
+    # Use MPLINE volume data (PUNO;PNLI;PNLS;UDN1)
+    [.POLines.results[] | .records[] | (.REPL | split(";")) | {PUNO: .[0], PNLI: .[1], PNLS: .[2], amount: (.[3] | tonumber)}]
+  elif $a030 == "B" then
+    # Use MPOEXP amount data
+    [.POMontants.results[] | .records[] | (.REPL | split(";")) | {PUNO: .[0], PNLI: .[1], PNLS: .[2], amount: (.[3] | tonumber)}]
+  else
+    # A030 is neither A nor B
+    []
+  end
+) as $records |
+
+# Calculate the sum of all amounts (use 1 if sum is 0 to avoid division by zero)
+([$records[].amount] | add // 0) as $rawSum |
+(if $rawSum == 0 then 1 else $rawSum end) as $totalSum |
+
+# Create bulk API request for APS450MI.AddLine
+# Prorata calculation: (individualAmount / totalSum) * grossPrice
+# If RVQA is not empty or 0, divide GRPR by RVQA
+# If totalSum was 0, GRPR will be 0 for all lines
+{
+  program: "APS450MI",
+  transactions: [
+    range($records | length) as $idx |
+    $records[$idx] | . as $rec |
+    $rvqaList[$idx] as $rvqa |
+    # Calculate base GRPR
+    (if $rawSum == 0 then 0 else (($rec.amount / $totalSum) * $grossPrice) end) as $baseGrpr |
+    # If RVQA is valid (not empty, not null, not 0), divide GRPR by RVQA
+    (
+      if ($rvqa != null and $rvqa != "" and ($rvqa | tonumber) != 0) then
+        ($baseGrpr / ($rvqa | tonumber))
+      else
+        $baseGrpr
+      end
+    ) as $finalGrpr |
+    {
+      transaction: "AddLine",
+      record: {
+        INBN: $inbn,
+        RDTP: "5",
+        PUNO: $rec.PUNO,
+        PNLI: $rec.PNLI,
+        PNLS: $rec.PNLS,
+        GRPR: (($finalGrpr * 100000 | round) / 100000 | tostring),
+        DIVI: $divi,
+        IVQA: $rvqa,
+        CHGT: $chargeText
+      }
+    }
+  ]
+}
+</JQScript>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>6</SequenceNumber>
+                              <Name>AddInvoiceLines</Name>
+                              <Description>Addition des lignes APS451 reventiller</Description>
+                              <ActivityType>ION_API</ActivityType>
+                              <Operation>{"productName":"M3","productLogicalid":"infor.m3","method":"POST","path":"M3/m3api-rest/v2/execute","proxyPath":"M3/m3api-rest/v2","restPath":"/execute","endpointName":null,"resourceName":null,"description":null,"inputContentTypes":["JSON"],"outputContentTypes":["JSON"],"inputParameters":[{"name":"cono","description":"The company context to use. Defaults to user default","type":"QUERY","dataType":"integer","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"divi","description":"The division context to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"lanc","description":"The language code to use. Defaults to user default","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"locale","description":"Locale to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"timeZone","description":"Time zone to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"maxrecs","description":"Max number of records returned. 0 is unlimited","type":"QUERY","dataType":"integer","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"dateformat","description":"Date format to use","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"excludempty","description":"When true, empty fields are omitted in response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"righttrim","description":"When true, all values are right trimmed in response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"format","description":"Controls output JSON format","type":"QUERY","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"extendedresult","description":"Show transaction parameters in the response","type":"QUERY","dataType":"boolean","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"positionkey","description":"Position to start reading from","type":"HEADER","dataType":"string","required":false,"schema":null,"example":null,"value":null,"path":null},{"name":"body","description":"Since the request body is processed in a streaming fashion, ordering of attributes must be taken into account - the \"transactions\" attribute must be the last attribute of the request.","type":"BODY","dataType":null,"required":true,"schema":null,"example":null,"value":"${CalculateProrata.output}","path":null}],"inputContentType":"JSON","outputContentType":"JSON","outputParameters":[{"name":"APS450MI_AddLine","description":null,"type":"BODY","path":null,"value":null}]}</Operation>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>7</SequenceNumber>
+                              <Name>RecuperationErreurs_AddLine</Name>
+                              <Description>Recuperation erreur depuis addition ligne APS451MI</Description>
+                              <ActivityType>JQ</ActivityType>
+                              <JQTransformParameterName>JSONJQINPUT</JQTransformParameterName>
+                              <JQTransformParameterValue>{
+"response":"${AddInvoiceLines.APS450MI_AddLine}",
+"request":"${CalculateProrata.output}"
+}</JQTransformParameterValue>
+                              <JQScript># Validate APS450MI.AddLine response and create error messages for failed transactions
+# Input: { request: prepareAPS450MIAddLine, response: APS450MIAddLine }
+# Output: Array of error messages for transactions that failed
+
+.request.transactions as $requests |
+.response.results as $results |
+
+[
+  range($results | length) as $idx |
+  $results[$idx] as $result |
+  $requests[$idx] as $request |
+  
+  # Extract PO info from request for error message
+  $request.record.PUNO as $puno |
+  $request.record.PNLI as $pnli |
+  $request.record.PNLS as $pnls |
+  $request.record.INBN as $inbn |
+  
+  # Check if the result has an errorMessage field
+  if $result.errorMessage != null and $result.errorMessage != "" then
+    {
+      PUNO: $puno,
+      PNLI: $pnli,
+      PNLS: $pnls,
+      INBN: $inbn,
+      ErrorMessage: "Erreur lors de l'ajout de ligne facture pour OA: \($puno), Ligne: \($pnli), Suffixe: \($pnls), Lot facture: \($inbn) - \($result.errorMessage)"
+    }
+  # Check if the response has no records (failed transaction)
+  elif ($result.records | length) == 0 then
+    {
+      PUNO: $puno,
+      PNLI: $pnli,
+      PNLS: $pnls,
+      INBN: $inbn,
+      ErrorMessage: "Échec de l'ajout de ligne facture pour OA: \($puno), Ligne: \($pnli), Suffixe: \($pnls), Lot facture: \($inbn)"
+    }
+  else
+    empty
+  end
+]
+</JQScript>
+                           </Activity>
+                        </FlowPart>
+                        <FlowPart>
+                           <Activity>
+                              <SequenceNumber>8</SequenceNumber>
+                              <Name>VerificationErreurAPI_AddLine</Name>
+                              <Description>Verification si addition ligne a eu une erreur.</Description>
+                              <ActivityType>CBR_FILTER</ActivityType>
+                              <FilterExpression>if ($.erreur.length == 0) 'Yes'; else 'No'</FilterExpression>
+                              <FilterWorkflowOutput>{"terminateOutput":"{\n\"ErrorMessage\":\"${RecuperationErreurs_AddLine.output}\"\n}","status":200}</FilterWorkflowOutput>
+                              <FilterParameters>
+                                 <FilterParameter>
+                                    <Name>erreur</Name>
+                                    <FilterParameterValue>${RecuperationErreurs_AddLine.output}</FilterParameterValue>
+                                 </FilterParameter>
+                              </FilterParameters>
+                           </Activity>
+                        </FlowPart>
+                     </FlowParts>
+                  </FlowPartContainer>
+               </FlowPart>
+            </FlowParts>
+         </FlowPartContainer>
+      </FlowPart>
+   </ApiFlow>
+</ApiFlows>
