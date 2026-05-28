@@ -181,8 +181,17 @@ enterprise styling (fonts, colors, table layouts, Infor logo, header/footer stru
     *generic infrastructure*.
 
 20. **Spelling: `Dependances` → `Dependencies`** in the section 2.2 heading
-    and anywhere else the template carries the typo. Apply via the
-    `TextReplace` helper so only `<w:t>` content is affected.
+    and anywhere else the template carries the typo. **Word's spell-checker
+    splits misspelled words across multiple runs** (`<w:proofErr w:type="spellStart"/>`
+    surrounding `<w:r>D</w:r><w:r>e</w:r><w:r>pendances</w:r>`), so a full-string
+    search for `Dependances` finds nothing. Replace the trailing unique fragment
+    instead — `pendances` → `pendencies` at the `<w:t>` level catches every
+    split-run case in one pattern. Use:
+    ```powershell
+    [regex]::Replace($xml, '<w:t([^>]*)>pendances</w:t>', '<w:t${1}>pendencies</w:t>')
+    ```
+    The same technique applies to any other typo Word has flagged
+    (`<w:proofErr>` markers indicate split runs).
 
 21. **Section 3.1 *Deliverable interface* table — keep only rows for component
     types present in the confirmed deliverables.** Delete all template rows
@@ -228,6 +237,16 @@ enterprise styling (fonts, colors, table layouts, Infor logo, header/footer stru
 
 27. **Collapse runs of ≥ 2 empty paragraphs to 1.** Substring substitutions that
     emptied template text leave gaps; flatten them iteratively until stable.
+
+27a. **Strip ALL trailing empty paragraphs before the final `<w:sectPr>`.**
+    The template often carries 5+ empty `<w:p>` blocks at the end of the body
+    that produce a blank last page in Word. Iteratively remove every empty
+    paragraph immediately before `<w:sectPr>`:
+    ```powershell
+    $pattern = '<w:p\b[^>]*>\s*<w:pPr>(?:(?!</w:pPr>)[\s\S])*?</w:pPr>\s*</w:p>(?=\s*<w:sectPr)'
+    while ($prev -ne $d) { $prev = $d; $d = [regex]::Replace($d, $pattern, '', 1) }
+    ```
+    Removes the blank last page entirely (typical: 8 pages → 7 pages).
 
 28. **No oversized white space above the cover-page title.** The title sits
     just below the header band, not pushed toward mid-page.
