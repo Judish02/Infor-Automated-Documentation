@@ -188,6 +188,145 @@ Infor logo, header / footer structure) that the reference already has.
     - The **only** red ink in the document is the red placeholders (rule 9) and
       red-bordered screenshot boxes (rule 10) — never red headings.
 
+16. **No oversized white space above the title on page 1.** The cover-page title
+    (*DES-030 INSTRUCTIONS DE DÉPLOIEMENT*) must sit close to the top of page 1 —
+    just below the header band, not pushed two-thirds down the page. Remove any
+    empty paragraphs or large `<w:spacing w:before>` blocks that the template uses
+    to vertically center the title.
+
+17. **Body and tables align flush-left to the page margin.** All running text,
+    headings, table-of-contents lines, and tables align to the **left page margin** —
+    not centered, not indented from the section heading. The only exception is the
+    title block on page 1, which stays centered.
+    - The *Table des matières* (TOC) lines must sit at the same left edge as the
+      "1.1 Suivi des versions" heading directly below them.
+    - The *Suivi des versions* and *Extensions développées* tables, and every other
+      content table, share the same left starting position as the surrounding
+      paragraph text.
+
+18. **Bullet and numbered lists keep a small indent.** Unordered (`•`) and ordered
+    (`1.`, `2.`, …) list items remain slightly indented from the body left edge
+    (the standard hanging indent the reference template uses — usually 720 DXA
+    left / 360 hanging). Do **not** strip the indent so they sit flush-left like
+    body paragraphs; lists must visually read as lists.
+
+19. **Section 1 *Suivi des versions* table contains exactly ONE data row by default.**
+    On initial generation the table has one row: `Date = today`, `Auteur = author from
+    DES-020`, `Version = 1.0`, `Changement de référence = "Document création"`.
+    Strip any extra rows the template carries (e.g. 1.1, 1.2 history rows).
+    Additional rows are added only when the user makes subsequent versions.
+
+20. **All Section 1 dates equal today** by default.
+    - `Date de création du document` = today.
+    - `Dernière mise à jour` = today (same as creation date on initial generation).
+    - The unique row in the *Suivi des versions* table = today.
+    Never carry over template dates (e.g. `21/11/25`) into a freshly generated doc.
+
+21. **Two distinct "reference" fields — do not confuse them.**
+    - **`Référence du document`** (in the Section 1 *Propriétés du document* table) =
+      the **exact filename of the input DES-020 `.docx`** including extension,
+      e.g. `DES020_Lst_CutOff_OrchestrationDesCommandes.docx`.
+    - **`File Ref`** (in the page header / footer band) = the **exact filename of
+      this DES-030 output `.docx`** including the version suffix and `.docx`
+      extension, e.g. `DES-030_LstCutOff_M3_OrchestrationDesCommandes_V1_0.docx`.
+      Replace any template-supplied shortened label such as "DES030 LstCutOff"
+      with this full filename — never drop the `V1_0` or the `.docx` extension.
+
+22. **All content tables share the same styling as the *Suivi des versions* table.**
+    The *Extensions développées*, *Validations*, approval, and any other tables
+    inserted in the document use the same banded header row, same border palette,
+    same column-padding, same Arial 22 half-points body text. Do not let the
+    template carry over a divergent table style (e.g. different header fill, no
+    borders, mismatched cell padding) for any of these tables.
+
+23. **No strikethrough (`<w:strike/>`) anywhere in the generated document.** Strip
+    every `<w:strike/>` and `<w:dstrike/>` element from `word/document.xml`,
+    `header*.xml`, and `footer*.xml`. Strikethrough text only appears as an
+    artefact of the source template's history — it is never part of a clean
+    DES-030 deliverable.
+
+24. **No Word comments in the generated document.** Strip every comment from the
+    output:
+    - Remove all `<w:commentRangeStart>`, `<w:commentRangeEnd>`, and
+      `<w:commentReference>` elements from `word/document.xml`.
+    - Delete `word/comments.xml`, `word/commentsExtended.xml`, `word/commentsIds.xml`,
+      `word/commentsExtensible.xml`, and `word/people.xml` from the unzipped output.
+    - Remove the corresponding `<Relationship>` entries from
+      `word/_rels/document.xml.rels` and the matching `<Override>` entries from
+      `[Content_Types].xml`. A generated DES-030 ships clean — no margin-side
+      comment threads carried over from the template.
+
+25. **Canonical order of deliverable rows in Section 4 (*Objets Livrables et
+    Extensions*).** When the confirmed deliverables table contains multiple
+    component types, render them in the DES-030 in this exact order:
+
+    1. **XtendM3 Transaction / Extension** (`.json`, `.groovy`, `.java`)
+    2. **Custom BOD / Custom List / Agreement** (`.zap`)
+    3. **Object Schema** (`.zip`) — including `Object Schema (Notification)` variants
+    4. **Schema Extension** (`.zip`)
+    5. **Script** (`.sql`, `.js`, custom)
+    6. **ION Mapping** (`.xml`)
+    7. **Workflow** (`.xml`)
+    8. **Document Flow / Dataflow** (`.xml`)
+    9. **Monitor** (`.xml`)
+    10. **MEC Mapper** (`.lson`, `.xml`) — last
+
+    Within a type that has multiple files (e.g. two Object Schemas), group all files
+    under a single row per rule 11 — the type appears once, with its multiple files
+    listed in the `Fichier` cell. The canonical-order rule applies to the set of
+    types present in the actual deliverables; types absent from the project are
+    simply skipped without leaving an empty placeholder row.
+
+26. **Re-zip output with `System.IO.Compression.ZipFile`, not `Compress-Archive`.**
+    PowerShell's `Compress-Archive` cmdlet produces ZIP archives that Word 2016+ may
+    reject as malformed (the resulting `.docx` opens with *"Word experienced an error
+    trying to open the file"*). Always re-zip with .NET's `ZipFile.CreateFromDirectory`:
+    ```powershell
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+    [System.IO.Compression.ZipFile]::CreateFromDirectory($unpackedDir, $outZip)
+    ```
+    This produces a standards-compliant ZIP that Word reliably opens.
+
+27. **Wrap every embedded image with a thick red border in the generated document.**
+    Reference templates carry over screenshots from a different WRICEF that almost
+    certainly need to be replaced. Apply a `<wp:effectExtent>` / drawing border around
+    every `<w:drawing>` element so the user visually identifies which screenshots to
+    swap out. Use the same red `C00000` color + `size: 24` half-points used by rule 10
+    for screenshot placeholders. The user can manually remove the border from generic
+    UI screenshots (e.g. "click the Import button") that don't show component names —
+    but the default for the generator is **border everything**.
+
+28. **Strip the `Date Maj` column value and every other "last modified" template date
+    in Section 4 (*Objets Livrables et Extensions*) → today's date.** The
+    *Extension Object name / Date Maj* table inherits a stale template date such as
+    `21/11/25` in its `Date Maj` cell; replace it with today during generation.
+
+29. **No duplicate filenames inside a single cell.** When the template carries a
+    deliverable name twice in the same `<w:tc>` (typically the original line +
+    a strikethrough "previous" version), keep only **one** entry — the latest /
+    non-strikethrough one. This applies both in the *Extensions développées* table
+    AND in the Section 5 step list ("Localisez le fichier xtendM3" instruction).
+
+30. **Collapse blank paragraphs left over from removed template text.** After
+    substring replacements that emptied template text (e.g. "RFO 5294" → ""),
+    consecutive empty `<w:p>` elements remain and create awkward vertical gaps.
+    Reduce any run of ≥ 2 empty paragraphs in a row to a single empty paragraph.
+    In particular, **the screenshot / image immediately following an instruction
+    sentence must sit directly below the text — no empty paragraph between them.**
+
+31. **Remove the boilerplate "Template Version:" footer line.** The reference
+    template embeds a third footer line in `footer3.xml` reading
+    `Copyright © 2013 Infor … Template Version:`. The "Template Version:" run
+    (along with any trailing version stub) is template-tracking debris and must
+    be stripped from the generated DES-030. The Copyright line is fine to keep.
+
+32. **Date orphan-run cleanup must handle every split variant.** When a template
+    date is split across runs (`21` + `/11/25`, or `21` + `/11` + `/25`, or
+    `21/11` + `/25`, etc.), substituting only one fragment leaves the rest behind
+    as a visible artefact (e.g. `28/05/26/11`). The cleanup pass must scrub every
+    standalone date-fragment run — `/11`, `/25`, `/11/25`, `11`, `21`, `/` — when
+    it appears immediately after the new date in the same cell.
+
 14. **Auto-update Table of Contents.** Insert a TOC immediately after the title block
     (using `new TableOfContents("Sommaire", { hyperlink: true, headingStyleRange: "1-3" })`)
     and after generation, ensure all H1 / H2 / H3 outline levels are set so Word will
