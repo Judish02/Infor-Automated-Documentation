@@ -66,28 +66,3 @@ DES030_generation/
 ├── CLAUDE.md                      # This file — project context only
 └── skill.md                       # The des030-generator skill definition + runtime rules
 ```
-
-## Reference example naming convention
-
-The prefix indicates the flow class — use it in Step 4 to pick the closest reference.
-
-| Prefix pattern | Class | Meaning |
-|---|---|---|
-| `NNN_OUT_E ...` | A · ION WRICEF | Outbound, Event-triggered |
-| `NNN_OUT_A ...` | A · ION WRICEF | Outbound, File / scheduled |
-| `NNN_IN_A ...` | A · ION WRICEF | Inbound, File / scheduled |
-| `NNNN_<Vendor>_<Process>` | A · ION WRICEF | Numbered interface (e.g. `5057_TecCom_Orders`) |
-| `U-NNN ...` / `U0NN ...` | B · Pure XtendM3 / Ariane | Custom extension or workflow |
-
-## Glossary
-
-- **WRICEF** — Workflow, Report, Interface, Conversion, Enhancement, Form. The unit of work.
-- **DES-020** — Technical Design Specification (the *how-it's-built* document).
-- **DES-030** — Deployment & Promotion Guide (the *how-it-ships* document — what we generate).
-- **ION Desk** — Infor's integration management UI.
-- **MEC** — M3 Enterprise Collaborator (mapping / transformation layer).
-- **Event Hub** — Infor's publish / subscribe event bus; composite events often involve
-  `CMS042` / `CMS045`.
-- **XtendM3** — In-process Java / Groovy extension framework inside the M3 Business Engine.
-- **Ariane** — Internal codename for pack / unpack-script-driven Pure XtendM3 deployments.
-- **DEV / TEST / PROD** — promotion tiers; every DES-030 walks a deliverable through them.

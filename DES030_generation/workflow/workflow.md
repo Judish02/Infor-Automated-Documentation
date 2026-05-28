@@ -6,43 +6,40 @@ DES-020 Technical Specification plus physical deliverables.
 This file is the **single procedural source of truth**. Skill identity and runtime rules
 live in `../skill.md`. Project context (user, folders, glossary) lives in `../CLAUDE.md`.
 
-Toolchain: **PowerShell + Node.js + `docx-js`**. No Python.
+> **Generation strategy (important): COPY + EDIT, do NOT build from scratch.**
+> The DES-030 is produced by copying the closest reference `.docx` and making targeted
+> string replacements inside its `word/document.xml`. Never use `docx-js` / `gen.js` to
+> build a new document — the styling will not match the project standard.
+
+Toolchain: **PowerShell** (`Expand-Archive` / `Compress-Archive`) + the **Edit** tool for
+in-place XML string replacement. **No Node.js / docx-js. No Python.**
 
 ---
 
-## Step 0 — Prerequisites (ONE-TIME SETUP, skip on every subsequent run)
+## Step 0 — Prerequisites
 
-Run once per machine, never again:
+PowerShell (`Expand-Archive` / `Compress-Archive`) is built into Windows — nothing to
+install. The `docx` Claude skill provides reference patterns for editing `.docx` XML, but
+no external dependency is invoked during generation.
 
-- Install Node.js → https://nodejs.org
-- `npm install -g docx` (the `docx-js` library — installed globally; do **not** reinstall
-  on each generation)
-- `docx` Claude skill enabled (already installed in this workspace, pinned in
-  `skills-lock.json`)
-
-Verify the toolchain is ready (run before generating):
-
-```bash
-node --version          # expect v18+
-npm ls -g docx          # expect "docx@..." (any version)
-```
-
-If both succeed, **skip Step 0 entirely on every future run** — go straight to Step 1.
+Skip Step 0 from Step 1 onward.
 
 ---
 
 ## Step 1 — Locate inputs
 
+> **Convention** — *"generate the DES-030"* (or any equivalent phrasing, in EN or FR)
+> always means **the DES-020 currently sitting in `../02_Current_Target/`**. Do not ask
+> the user where the file is.
+
 - Look in `../02_Current_Target/` for the active `DES020_*.docx`.
+- **Exactly one** `DES020_*.docx` → use it.
+- **Multiple** `DES020_*.docx` → list them and ask the user to pick one. Do not guess.
+- **Zero** `DES020_*.docx` → halt and tell the user the folder is empty.
 - Note whether a partial `DES030_*.docx` already exists there (update vs. create).
-- Confirm deliverable component files are present (`Composants` / `Delivery Components`
-  folder, or loose `.zap` / `.xml` / `.groovy` / etc.).
-
-If no deliverables are visible, halt and ask the user in French — exactly:
-
-> *"Quels sont les composants délivrables pour cette interface ? (Object Schema, Document Flow, Mapping, MEC Mapper, Event Analytics, XtendM3, etc.)"*
-
-(For non-interactive runs, apply the Emergency Contextual Deduction rule in `../skill.md`.)
+- Note any deliverable component files on disk (`Composants` / `Delivery Components`
+  folder, or loose `.zap` / `.xml` / `.groovy` / etc.) — these supplement what Step 5
+  extracts from the DES-020 body.
 
 ---
 
@@ -87,42 +84,131 @@ Detection is automatic from content. Do not ask the user to choose.
 
 ---
 
-## Step 4 — Pick the closest reference example
+## Step 4 — Pick the source template (highest match first)
 
-In `../01_Reference_Examples/`, choose the subfolder matching flow class + direction:
+The output is built by **copying** this template and editing it in place. Choose the
+first source that matches:
 
-| Input looks like | Reference to mirror |
-|---|---|
-| Outbound event interface | `001_OUT_E ...` |
-| Inbound file interface | `002_IN_A` |
-| Outbound file interface | `008_OUT_A` |
-| Numbered vendor interface | `5057_*`, `5286-*`, `5296_*` |
-| Custom workflow / extension | `U002`, `U-005`, `U-009`, ... |
+1. **An existing DES-030 in `../02_Current_Target/`** for the same WRICEF (often a prior
+   version, e.g. `DES030_<WRICEF>_v2 1.docx`) — strongest match, use as template.
+2. **The closest reference in `../01_Reference_Examples/`** matching flow class +
+   direction:
 
-Read its `DES-030_*.docx` for tone, section structure, table layouts, and depth. Read its
-`DES030_Composants/` (or `Delivery Components/`) for deliverable filename conventions.
+   | Input looks like | Reference to mirror |
+   |---|---|
+   | Outbound event interface | `001_OUT_E ...` |
+   | Inbound file interface | `002_IN_A` |
+   | Outbound file interface | `008_OUT_A` |
+   | Numbered vendor interface | `5057_*`, `5286-*`, `5296_*` |
+   | Custom workflow / extension | `U002`, `U-005`, `U-009`, ... |
+
+Open the chosen template and capture its existing values that you will need to replace:
+old version string, old date(s), old author, old deliverable filenames. The chosen
+template is **read-only** — never edit it in place. Always copy first.
 
 ---
 
-## Step 5 — Inventory deliverables
+## Step 5 — Inventory deliverables (MANDATORY confirmation gate)
 
-List every physical component file in the workspace and map each:
+This step **must complete with explicit user confirmation** before Step 6 runs.
 
-| File | Infor Component Category | Platform Tool |
+### 5.1 Extract proposed deliverables from the DES-020
+
+Scan the DES-020 body for every component the interface needs. Look for:
+
+- explicit filename references (`*.zap`, `*.xml`, `*.zip`, `*.lson`, `*.json`, `*.groovy`,
+  `*.java`) inside body paragraphs, tables, and figure captions;
+- technical patterns implying components even when no filename is given
+  (MEC mapper → `.lson` / `.xml`; ION import → `.zap`; Document Flow → `.xml`;
+  Object Schema → `.zip`; XtendM3 Transaction → `.json`; Monitor → `.xml`;
+  Custom BOD / Agreement → `.zap`);
+- any deliverable files already on disk in `../02_Current_Target/` (treat as authoritative
+  over deduced ones).
+
+### 5.2 Present the table to the user for confirmation
+
+Output **in the chat** (not in the `.docx` yet) a Markdown table with the exact column
+headers `Type` and `Fichier`. Example shape:
+
+```
+| Type                          | Fichier                                              |
+|-------------------------------|------------------------------------------------------|
+| Custom BOD / Agreement        | M3EDI_M3EDISalesOrderCustom_Load_In_2_13_0.zap       |
+| Object Schema                 | M3EDISalesOrderCustom.zip                            |
+| ION Mapping                   | M3EDISalesOrderCustomLoadMapping.xml                 |
+| Object Schema (Notification)  | M3IECNotification.zip                                |
+| Document Flow                 | Spoon_LoadM3EDISalesOrderCustom.xml                  |
+| Monitor                       | Spoon_M3EDISalesOrderCustomNotification.xml          |
+```
+
+Then **halt and wait**. The user may:
+
+- **confirm** (e.g. *"ok"*, *"confirmé"*, *"go"*, *"générer"*) → proceed to Step 6;
+- **modify** a row (change a `Type` or `Fichier` value) → update the table and re-display
+  it for confirmation;
+- **add** a row → append it and re-display;
+- **delete** a row → drop it and re-display.
+
+Do not move to Step 6 until the user issues a confirmation phrase.
+
+### 5.3 Component type vocabulary
+
+Use these canonical `Type` labels (extend only when the DES-020 forces it):
+
+| Type label | Typical extension | Class |
 |---|---|---|
-| ... | Object Schema / Document Flow / Mapping / MEC Mapper / Event Analytics / XtendM3 package / Ariane config | ION Desk / MEC / Event Hub / XtendM3 IDE |
+| Custom BOD / Agreement | `.zap` | A |
+| Object Schema | `.zip` | A |
+| Object Schema (Notification) | `.zip` | A |
+| ION Mapping | `.xml` | A |
+| Document Flow | `.xml` | A |
+| Monitor | `.xml` | A |
+| MEC Mapper | `.lson` / `.xml` | A |
+| Event Analytics | `.xml` | A |
+| XtendM3 Transaction | `.json` | B |
+| XtendM3 Extension | `.groovy` / `.java` | B |
+| Ariane Pack | `.zip` / script | B |
 
-This table feeds DES-030 Section 4 directly.
+The confirmed table becomes DES-030 Section 4 (*Objets Livrables et Extensions*) verbatim.
+
+### 5.4 Non-interactive bypass
+
+Only when the user has explicitly forced a non-interactive run (*"sans confirmation"*,
+*"non-interactive"*, *"skip prompts"*) skip the wait at 5.2 and proceed directly to Step
+6, marking each deduced row `[Déduit du DES-020 — à confirmer]` in Section 4.
 
 ---
 
-## Step 6 — Generate the DES-030 (`.docx`)
+## Step 6 — Generate the DES-030 (`.docx`) by COPY + EDIT
 
-Use the `docx` Claude skill (Node.js / `docx-js` path). The full library reference is at
-`.claude/skills/docx/SKILL.md` (page sizes, styles, lists, tables, images, headers,
-footers, TOC, hyperlinks, etc.).
+**Do not build a new document with `docx-js`.** Copy the template chosen in Step 4 and
+edit its XML in place. This guarantees the styling matches the project standard exactly
+(fonts, colors, header layout, Infor logo, table designs, TOC, etc.).
 
-### 6.1 Required DES-030 section schema (9 sections, in order, French titles)
+### 6.0 Procedure (PowerShell — runs without permission prompts in this project)
+
+```powershell
+$src = "..\02_Current_Target\<chosen-template>.docx"
+$out = "..\02_Current_Target\DES-030_<WRICEF_ID>_<System>_<Name>_V<X_Y>.docx"
+$work = "$env:TEMP\des030_build"
+
+# 1. Copy the template to the output location
+Copy-Item $src $out -Force
+
+# 2. Unzip the copy into a working folder
+if (Test-Path $work) { Remove-Item $work -Recurse -Force }
+Copy-Item $out "$env:TEMP\des030_build.zip" -Force
+Expand-Archive "$env:TEMP\des030_build.zip" $work -Force
+
+# 3. (next: use the Edit tool on $work\word\document.xml — see 6.4)
+
+# 4. After XML edits, re-zip and replace the .docx
+Remove-Item $out -Force
+Compress-Archive -Path "$work\*" -DestinationPath "$env:TEMP\des030_build.zip" -Force
+Move-Item "$env:TEMP\des030_build.zip" $out -Force
+```
+
+### 6.1 Required DES-030 section schema (must already exist in the template)
 
 1. **CONTROLE DU DOCUMENT**
    - Table 1: `Version | Date | Author | Description of Change` (English keys, French
@@ -154,143 +240,36 @@ footers, TOC, hyperlinks, etc.).
 - **Document control / system attributes:** English keys (Version, Date, Author, etc.)
   with French values where natural.
 - **Format:** `.docx` only. No `.doc`, no PDF.
-- **Font:** Arial (the `docx` skill's default — do not change unless a reference example
-  clearly does).
-- **Page size:** A4 (French / EU project — do not override to US Letter).
-- **Headers / footers:** WRICEF ID + version on every page.
-- **Tables:** real Word tables (`docx-js` `Table` / `TableRow` / `TableCell`) with
-  explicit DXA widths — never percentages, never ASCII-art tables.
+- **Styling:** inherited from the template — do NOT override fonts, colors, header
+  layout, or table designs. The template IS the style reference.
 
-### 6.3 `docx-js` generation skeleton
+### 6.3 XML edits to apply in `$work\word\document.xml`
 
-Drop this into `gen.js` inside a working directory, fill in the variables, then
-`node gen.js`. It wires up A4, Arial default, header/footer with WRICEF + version, and
-all 9 headings — extend each section with body paragraphs and tables per the schema
-above.
+The template already has the correct styling, sections, and tables. Apply only the
+minimal find-and-replace edits below using the **Edit** tool:
 
-```javascript
-// gen.js — DES-030 generation skeleton
-const fs = require('fs');
-const {
-  Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell,
-  Header, Footer, AlignmentType, HeadingLevel, BorderStyle, WidthType,
-  ShadingType, PageNumber, LevelFormat, TabStopType, TabStopPosition,
-} = require('docx');
+| Replace | With |
+|---|---|
+| Old version string (e.g. `1.0`, `V1.0`) wherever it appears in the document-control table | New version |
+| Old creation date / last update date | Today's date in `DD/MM/YYYY` (FR format) |
+| Old author name | New author (if different) |
+| Old WRICEF ID / name | New WRICEF ID / name (if different) |
+| Old deliverable filenames in Section 4 table | Confirmed Step 5 filenames |
+| Old description-of-change cell | French summary of why this version exists |
 
-// --- Variables from Step 2 attribute extraction --------------------------
-const WRICEF_ID  = '5058-IE-TDX-01-CDV';
-const NAME       = 'Orders';
-const SYSTEM     = 'M3 / TecCom';
-const VERSION    = 'V1.0';
-const AUTHOR     = 'Judish Hurkhoo';
-const TODAY      = new Date().toISOString().slice(0, 10);
-const OUT_PATH   = `../02_Current_Target/DES-030_${WRICEF_ID}_${SYSTEM.replace(/\s|\//g,'_')}_${NAME}_${VERSION.replace('.','_')}.docx`;
+Also edit `$work\word\header*.xml` and `$work\word\footer*.xml` for the same WRICEF /
+version substitutions.
 
-// --- Helpers -------------------------------------------------------------
-const h1 = (txt) => new Paragraph({ heading: HeadingLevel.HEADING_1, children: [new TextRun({ text: txt, bold: true })] });
-const p  = (txt) => new Paragraph({ children: [new TextRun(txt)] });
-const border = { style: BorderStyle.SINGLE, size: 1, color: '999999' };
-const borders = { top: border, bottom: border, left: border, right: border };
-const cell = (txt, width, fill) => new TableCell({
-  borders,
-  width: { size: width, type: WidthType.DXA },
-  shading: fill ? { fill, type: ShadingType.CLEAR } : undefined,
-  margins: { top: 80, bottom: 80, left: 120, right: 120 },
-  children: [p(txt)],
-});
+For uncertain values (e.g. unknown `.zap` version, missing approver name), inject a red
+placeholder run inside the relevant XML cell:
 
-// --- Document Control table (Section 1) ---------------------------------
-const docControlTable = new Table({
-  width: { size: 9026, type: WidthType.DXA },   // A4 content width: 11906 - 2 * 1440
-  columnWidths: [1500, 1800, 2500, 3226],
-  rows: [
-    new TableRow({ children: [
-      cell('Version', 1500, 'D5E8F0'),
-      cell('Date',    1800, 'D5E8F0'),
-      cell('Author',  2500, 'D5E8F0'),
-      cell('Description of Change', 3226, 'D5E8F0'),
-    ]}),
-    new TableRow({ children: [
-      cell(VERSION, 1500),
-      cell(TODAY,   1800),
-      cell(AUTHOR,  2500),
-      cell('Création initiale du document de déploiement.', 3226),
-    ]}),
-  ],
-});
-
-// --- Document --------------------------------------------------------------
-const doc = new Document({
-  creator: AUTHOR,
-  title: `DES-030 ${WRICEF_ID} ${NAME}`,
-  styles: {
-    default: { document: { run: { font: 'Arial', size: 22 } } }, // 11pt body
-    paragraphStyles: [
-      { id: 'Heading1', name: 'Heading 1', basedOn: 'Normal', next: 'Normal',
-        quickFormat: true,
-        run: { size: 32, bold: true, font: 'Arial' },
-        paragraph: { spacing: { before: 240, after: 240 }, outlineLevel: 0 } },
-    ],
-  },
-  sections: [{
-    properties: {
-      page: {
-        size: { width: 11906, height: 16838 },   // A4 in DXA
-        margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 },
-      },
-    },
-    headers: { default: new Header({ children: [
-      new Paragraph({
-        children: [
-          new TextRun({ text: `DES-030 — ${WRICEF_ID} ${NAME}`, bold: true }),
-          new TextRun({ text: `\tVersion ${VERSION}` }),
-        ],
-        tabStops: [{ type: TabStopType.RIGHT, position: TabStopPosition.MAX }],
-      }),
-    ]}) },
-    footers: { default: new Footer({ children: [
-      new Paragraph({
-        children: [
-          new TextRun({ text: `${WRICEF_ID}` }),
-          new TextRun({ text: `\tPage `, }),
-          new TextRun({ children: [PageNumber.CURRENT] }),
-          new TextRun({ text: ` / ` }),
-          new TextRun({ children: [PageNumber.TOTAL_PAGES] }),
-        ],
-        tabStops: [{ type: TabStopType.RIGHT, position: TabStopPosition.MAX }],
-      }),
-    ]}) },
-    children: [
-      h1('1. CONTROLE DU DOCUMENT'),
-      docControlTable,
-      p(''),
-      h1('2. INTRODUCTION & OBJECTIF'),
-      p(`Ce document décrit la procédure de déploiement de l'interface ${WRICEF_ID} (${NAME}) depuis l'environnement DEV vers les environnements TEST et PROD.`),
-      h1('3. PREREQUIS ET DEPENDANCES SYSTEME'),
-      p('[Insérer prérequis environnementaux — accès ION Desk, MEC, droits utilisateurs, vérifications CMS042/CMS045 si Event Hub composite.]'),
-      h1('4. OBJETS LIVRABLES ET EXTENSIONS'),
-      p('[Insérer tableau des composants livrables — fichier, catégorie Infor, outil plateforme.]'),
-      h1("5. INSTRUCTIONS DE DEPLOIEMENT ET D'INSTALLATION"),
-      p('[Insérer étapes chronologiques — branchées par classe architecturale.]'),
-      h1('6. VALIDATION & TESTS POST-DEPLOYMENT'),
-      p('[Insérer instructions de vérification — composant en ligne, écoute des événements, traitement d’un payload de test.]'),
-      h1('7. PROCESSUS DE PROMOTION'),
-      p('[Insérer flux DEV → TEST → PROD avec points de validation.]'),
-      h1('8. PROCEDURE DE ROLLBACK'),
-      p('[Insérer procédure de retour arrière en cas d’échec.]'),
-      h1('9. APPROBATIONS & SIGNATURES'),
-      p('[Insérer tableau des approbateurs et signatures.]'),
-    ],
-  }],
-});
-
-Packer.toBuffer(doc).then(buf => {
-  fs.writeFileSync(OUT_PATH, buf);
-  console.log(`Wrote ${OUT_PATH}`);
-});
+```xml
+<w:r><w:rPr><w:b/><w:color w:val="C00000"/></w:rPr><w:t>[À COMPLÉTER — &lt;hint&gt;]</w:t></w:r>
 ```
 
-Generate the full document in one pass — do not truncate.
+The Edit tool's exact-string replace is the right primitive — keep edits small and
+targeted, never rewrite whole sections.
+
 
 ---
 
@@ -306,13 +285,12 @@ DES-030_[WRICEF_ID]_[System]_[Name]_V1_0.docx
 
 ## Step 8 — Validate
 
-- Open the generated `.docx` in Word and visually confirm all 9 sections, headers,
-  footers, tables.
-- Optional automated check: re-open the file with `node` + `mammoth` or
-  `Expand-Archive` to confirm the ZIP is well-formed (`Test-Path` on
-  `word/document.xml`).
-- Confirm: 9 sections present, tables render, header / footer carry WRICEF ID +
-  version, body is French.
+- Open the generated `.docx` in Word — visually confirm sections, headers, footers,
+  tables match the template.
+- ZIP-integrity check: `Expand-Archive` the output once; confirm `word/document.xml`
+  loads without error.
+- Confirm: deliverables table matches the user-confirmed Step 5 table verbatim, version
+  + date are correct, no leftover template-version markers remain.
 
 ---
 
