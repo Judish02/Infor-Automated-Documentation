@@ -25,321 +25,256 @@ Do not duplicate their content here — point to them.
 
 ## Generation strategy — COPY a reference, do NOT build from scratch
 
-The DES-030 is produced by **copying the closest reference DES-030 `.docx` and making
-targeted text edits inside it** — never by building a new document from scratch with
-`docx-js`. This preserves the exact enterprise styling (fonts, colors, table layouts,
-Infor logo, header / footer structure) that the reference already has.
+Produce the DES-030 by **copying the canonical reference DES-030 `.docx` and editing its
+XML in place** — never build a new document with `docx-js`. Copying preserves the exact
+enterprise styling (fonts, colors, table layouts, Infor logo, header/footer structure).
 
-### Source order (pick the first one that matches)
+### Source order
 
 1. **An existing DES-030 in `./02_Current_Target/`** for the same or a prior version of
-   this WRICEF (e.g. `DES030_<WRICEF>_v2 1.docx`) — strongest match, copy it.
-2. **The closest reference in `./01_Reference_Examples/`** matching flow class +
-   direction (see workflow Step 4 for the prefix table).
-
-### Editing approach
-
-1. Copy the chosen reference `.docx` to the new output filename in `./02_Current_Target/`.
-2. Unzip the copy with PowerShell `Expand-Archive`.
-3. Edit `word/document.xml` and any `word/header*.xml` / `word/footer*.xml` with **targeted
-   find-and-replace** for: version, dates, author name (if different), WRICEF ID (if
-   different), deliverables-table cells, and any uncertain content that becomes a red
-   `[À COMPLÉTER — …]` placeholder.
-4. Re-zip back into a `.docx` and save as the output file.
+   this WRICEF — strongest match, copy it.
+2. **Default canonical template:** `./01_Reference_Examples/5165 - Item Revision Management/DES-030_5165_Item_Revision_Management V1.2.docx`.
+   This template covers the full spectrum of Infor component types and carries the
+   preferred enterprise styling. Used for **all** generations regardless of class.
 
 ### Skill dependencies
 
 | Capability | Provided by | Where |
 |---|---|---|
-| Read / write `.docx` (ZIP + XML) | **`docx` cookbook skill** (XML-edit path, not docx-js path) | `.claude/skills/docx/SKILL.md` |
-| Unzip / re-zip | PowerShell `Expand-Archive` / `Compress-Archive` | built-in |
-| XML edits | Built-in Edit tool (string replacement in `document.xml`) | built-in |
+| Read / write `.docx` (ZIP + XML) | `docx` cookbook skill (XML-edit path) | `.claude/skills/docx/SKILL.md` |
+| Unzip / re-zip | `System.IO.Compression.ZipFile` (.NET, via PowerShell) | built-in |
+| XML edits | PowerShell regex + `[System.IO.File]::WriteAllText` (BOM-less UTF-8) | built-in |
 
 **Forbidden:**
-- Python. The legacy `gen_5058*.py` and `generate_des030_ariane.py` scripts are
-  deprecated. Do not run, edit, or extend them.
-- Building a DES-030 from scratch with `docx-js` (`gen.js`-style scripts).
-  Styling will never match the reference precisely — always copy + edit.
+- Python. Legacy `gen_*.py` scripts are deprecated.
+- Building from scratch with `docx-js`.
+- `PowerShell Compress-Archive` (produces ZIPs Word rejects).
+- `Set-Content -Encoding utf8` (PS 5.1 adds BOM, which Word rejects).
 
 ---
 
-## Critical runtime rules
+## Critical runtime rules — in execution order
 
-1. **Default input location** — when the user says *"generate the DES-030"*, *"génère le
-   DES-030"*, or any equivalent without specifying a path, **always** treat the active
-   DES-020 as the one(s) in `./02_Current_Target/`. Never ask "which file?" if exactly one
-   `DES020_*.docx` is present there. If multiple are present, list them and ask the user to
-   pick one — do not guess.
+### Phase 1 — Input discovery and confirmation (interactive)
 
-2. **MANDATORY deliverables confirmation gate** — generation is a **two-phase** process:
+1. **Default input location.** When the user says *"generate the DES-030"* without
+   specifying a path, **always** treat the active DES-020 as the file(s) in
+   `./02_Current_Target/`. With exactly one `DES020_*.docx`, use it directly. With
+   multiple, list them and ask the user to pick one. With zero, halt.
 
-   **Phase 1 — Extract & propose** (must complete before any `.docx` is written):
+2. **MANDATORY deliverables confirmation gate.** Generation is two-phase. In Phase 1:
    - Read the DES-020 from `02_Current_Target/`.
-   - Scan its body for component references (Custom BOD, Object Schema, ION Mapping,
-     Document Flow, Monitor, MEC Mapper, Event Analytics, XtendM3 Transaction, Ariane
-     scripts, etc.) and the filenames they cite.
-   - **Paste the proposed deliverables table directly into the chat reply** — Markdown
-     format with **exact column headers** `Type | Fichier`. The table is the body of
-     the message, not an attachment or link. User reviews in place and either confirms
-     or edits inline. Example:
+   - Scan its body for component references (XtendM3 Transaction, Object Schema, ION
+     Mapping, Document Flow, Custom BOD, Workflow, MEC Mapper, etc.) and the
+     filenames they cite.
+   - **Paste the proposed deliverables table directly into the chat** as a Markdown
+     table with exact column headers `Type | Fichier`.
+   - **Halt and wait.** The user may confirm (*"ok"*, *"confirmé"*, *"go"*) or edit
+     the table inline. Do not move to Phase 2 until the user confirms.
 
-     ```
-     | Type                          | Fichier                                              |
-     |-------------------------------|------------------------------------------------------|
-     | Custom BOD / Agreement        | M3EDI_M3EDISalesOrderCustom_Load_In_2_13_0.zap       |
-     | Object Schema                 | M3EDISalesOrderCustom.zip                            |
-     | ION Mapping                   | M3EDISalesOrderCustomLoadMapping.xml                 |
-     | Object Schema (Notification)  | M3IECNotification.zip                                |
-     | Document Flow                 | Spoon_LoadM3EDISalesOrderCustom.xml                  |
-     | Monitor                       | Spoon_M3EDISalesOrderCustomNotification.xml          |
-     ```
+3. **Auto-detect architectural class** from DES-020 content (ION WRICEF vs. Pure
+   XtendM3) — never ask the user to pick. Class drives Section 5 branching.
 
-   - **Halt and wait** for the user to confirm, modify, add, or delete rows. Do not write
-     any `.docx` until the user explicitly confirms (e.g. *"ok"*, *"confirmé"*,
-     *"générer"*, *"go"*).
+### Phase 2 — Generation (zero further prompts)
 
-   **Phase 2 — Generate automatically** (only after explicit confirmation):
-   - **Run with zero further prompts.** No "should I proceed?", no permission asks for
-     PowerShell / Node — just produce the file.
-   - **Copy** the chosen reference DES-030 (see *Generation strategy* above) to the new
-     output filename.
-   - **Edit** the copy's `word/document.xml` (and headers / footers) with targeted
-     find-and-replace: version, date, author, WRICEF ID, and the **confirmed deliverables
-     table** verbatim into the *Objets Livrables et Dépendances* section.
-   - Use red `[À COMPLÉTER — …]` placeholders only when the source genuinely lacks
-     information.
-   - Save the result, validate ZIP integrity, report the output path.
+4. **AUTOMATION RULE OVERRIDE.** Once Phase 2 begins, no further confirmation
+   prompts. Generate the full document in a single response. Skip permission asks
+   for PowerShell / Node — those are pre-approved per project settings.
 
-3. **AUTOMATION RULE OVERRIDE** — once in Phase 2, accept all formatting and structural
-   logic implicitly required for an enterprise-grade Infor deployment document. Do not
-   decline, abbreviate, or truncate any section unless the source text contains a literal
-   *"supprimer"* / *"delete"* instruction for that section.
+5. **Copy the canonical template** (see *Generation strategy* above).
 
-4. **Auto-detect architectural class** from DES-020 content — never ask the user to pick
-   Class A or Class B. Use the detected class to drive Section 5 branching (ION Desk
-   sequence vs. XtendM3 pack/unpack).
+6. **Re-zip with `[System.IO.Compression.ZipFile]::CreateFromDirectory`**, never
+   with `Compress-Archive`. `Compress-Archive` produces ZIPs Word rejects with
+   *"Word experienced an error trying to open the file"*.
 
-5. **`01_Reference_Examples/` is read-only** ground truth. Mirror its structure; never
-   modify the files inside.
+7. **Always write XML files BOM-less.** Use:
+   ```powershell
+   $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+   [System.IO.File]::WriteAllText($path, $content, $utf8NoBom)
+   ```
+   `Set-Content -Encoding utf8` in Windows PowerShell 5.1 prepends a BOM
+   (`EF BB BF`) which Word rejects on `document.xml` and all other parts.
 
-6. **Non-interactive bypass** — only when the user has explicitly forced an automated,
-   non-interactive run (e.g. *"sans confirmation"*, *"non-interactive"*, *"skip prompts"*),
-   skip the Phase 1 wait. Deduce the deliverables table from DES-020 technical patterns
-   (MEC mapper → `.lson` / `.xml`; Document Flow → `.xml`; ION import → `.zap`; XtendM3
-   extension → `.groovy` / `.java`) and proceed directly to Phase 2, marking each row
-   `[Déduit du DES-020 — à confirmer]`.
+8. **All text substitutions happen INSIDE `<w:t>…</w:t>` content only** — never via
+   blanket `String.Replace` on the whole XML. Identifiers like `5165` or
+   `EXT001MI` also appear as attribute values (`<wp:docPr id="…">`,
+   `<pic:cNvPr id="…">`) — replacing them globally corrupts numeric IDs and
+   makes Word refuse to open the file. Use this helper:
+   ```powershell
+   function TextReplace([string]$xml, [string]$find, [string]$repl) {
+     $escFind = [regex]::Escape($find)
+     $pattern = '(<w:t[^>]*>[^<]*)' + $escFind + '([^<]*</w:t>)'
+     $safeRepl = $repl.Replace('$', '$$')   # escape any '$' so regex doesn't read it as backref
+     $prev = ''
+     while ($prev -ne $xml) {
+       $prev = $xml
+       # Use ${1}/${2} braces — required when $repl starts with a digit, otherwise
+       # the regex engine reads "$1" + "28/05/2026" as backref "$128"
+       $xml = [regex]::Replace($xml, $pattern, '${1}' + $safeRepl + '${2}')
+     }
+     $xml
+   }
+   ```
 
-7. **No Python.** This is a hard project constraint — see `./CLAUDE.md`.
+### Phase 2 — Content substitutions (in order)
 
-8. **Structure mirrors the reference example.** Section ordering, heading hierarchy,
-   table column layouts, and depth of detail must follow the matching DES-030 picked in
-   Step 4 of the workflow. Deviate only when the source DES-020 explicitly demands it.
+9. **WRICEF identifiers + author + dates** via `TextReplace` (Step 8).
 
-9. **Red placeholders for everything uncertain.** Anything you cannot confirm from the
-   DES-020 or the reference example must appear in the output as a visible red
-   placeholder — never as silently-invented content and never omitted. This includes
-   names, dates, references the user must fill in, and any deduced deliverable rows.
-   - Text placeholder format: a French phrase wrapped in `[À COMPLÉTER — <hint>]`,
-     rendered with `new TextRun({ text: "...", color: "C00000", bold: true })` so it is
-     unmistakably red and bold in Word.
+10. **Doc reference fields — THREE distinct locations, two values:**
+    - **`Doc Réf` in the page HEADER** = the short identifier `WRICEF_System_Name`,
+      e.g. `LstCutOff_M3_OrchestrationDesCommandes`. **No `DES-` prefix, no
+      `.docx` extension, no version suffix.**
+    - **`Document Reference` cell in the Section 1 *Document Properties* table** =
+      **BLANK by default.** The DES-020 filename does *not* go here. Strip any
+      template content from this cell so the value column is empty.
+    - **`File Ref` (or `File Réf`) in the page FOOTER** = the **exact filename
+      of the input DES-020 `.docx`**, e.g.
+      `DES020_Lst_CutOff_OrchestrationDesCommandes.docx`. Verify no duplicated
+      prefix (`DES020_DES020_…`).
 
-10. **Screenshot / dataflow image placeholders.** When the reference example contains
-    architectural diagrams, dataflow screenshots, or workflow images, do **not** copy the
-    bitmap into the generated DES-030. Instead insert a **placeholder block at the same
-    position** with:
-    - A paragraph framed by a **thick red border** (`border: { top, bottom, left, right }`
-      each set to `{ style: BorderStyle.SINGLE, size: 24, color: "C00000", space: 6 }`).
-    - Inside, a red caption such as
-      `[CAPTURE D'ÉCRAN À REMPLACER — Diagramme de flux <nom>]`.
-    - Approximate height that matches the original (~6–10 cm) so layout is preserved.
+11. **First-page title (the blue/colored subtitle below "DES-030 DEPLOYMENT
+    SPECIFICATION")** = the same short identifier used in the header `Doc Réf`.
+    For LstCutOff this is `LstCutOff_M3_OrchestrationDesCommandes`. The
+    `Item Revision Management` → `OrchestrationDesCommandes` substitution must
+    leave this title block holding the full short identifier, not the bare name.
 
-    This makes every screenshot the user must swap visually obvious during review.
+12. **Header date** = today's date in `dd/mm/yyyy` format. Every template-supplied
+    date (e.g. `13/05/2026`) in `header*.xml` must be replaced — handle split-run
+    forms (`1` + `3/0` + `5` + `/2026`) by scrubbing the leftover fragments.
 
-11. **Group same-type deliverables in a single Section 4 entry / Section 5 block.**
-    When the confirmed deliverables table contains multiple files of the same `Type`
-    (e.g. two `Object Schema`, three `Document Flow`), do **not** create separate
-    deployment sub-sections for each. Group them: list all files under one `Type` row
-    in the Section 4 table, and in Section 5 produce a single import procedure that
-    loops over them ("Importer successivement les fichiers : *file1.zip*, *file2.zip*,
-    ..."). One Type → one logical deployment block, regardless of file count.
+13. **All Section 1 dates = today** by default. `Date de création` = today;
+    `Dernière mise à jour` = today; the unique row in *Suivi des versions* =
+    today. Handle split-run date variants (`21` + `/11/25`, `21/11` + `/25`,
+    `1` + `3/0` + `5` + `/2026`) by scrubbing the leftover fragments.
 
-12. **Uniform header on all pages.** Use the same header on every page including page 1.
-    Do **not** set `titlePage: true` or create a separate `headers.first`. The title
-    block on page 1 sits *below* the standard header.
+14. **Version = `1.0`** by default. Convert template `1.2` to `1.0` (handle the
+    `1.` + `2` split-run form, and the leftover `2` run after a `1.0` replacement).
 
-13. **Header logo rules.**
-    - The **Infor logo** (left side of the header) must appear on **every** page,
-      including page 1.
-    - The **right-side logo** (any client / partner / Spoon logo on the right in the
-      reference example) must be **removed entirely** on every page. Replace its
-      position with WRICEF ID + version text.
+15. **Strip strikethrough** (`<w:strike/>` and `<w:dstrike/>`) — template leftover.
 
-15. **Match reference heading style — no decorative colors.** The reference DES-030s use
-    a sober, enterprise-document look. Heading colors must be **black** (`auto` / no
-    explicit color). Decorative element is a **thin light-grey horizontal rule above
-    each H1 and H2** — implement via paragraph top border, size 12–48 half-points,
-    color `ACACAC`. Do **not** colour headings navy, blue, or any other accent.
-    - H1: bold, **UPPERCASE** (`caps`), size 28 half-points (14pt), grey top border,
-      page-break-before.
-    - H2: bold, size 28 half-points (14pt), grey top border, no page-break.
-    - H3: bold, size 24 half-points (12pt), no border.
-    - Title block: size 48 half-points (24pt), bold, centered.
-    - Body: Arial 22 half-points (11pt), black.
-    - The **only** red ink in the document is the red placeholders (rule 9) and
-      red-bordered screenshot boxes (rule 10) — never red headings.
+16. **Strip all Word comments.** Delete `comments.xml`, `commentsExtended.xml`,
+    `commentsExtensible.xml`, `commentsIds.xml`, `people.xml` from `word/`.
+    Remove matching `<Relationship>` entries in `word/_rels/document.xml.rels`
+    AND matching `<Override>` entries in `[Content_Types].xml` (use `[^>]*`,
+    NOT `[^/]*`, in the regex — PartName values contain `/`).
+    Remove `<w:commentRangeStart>`, `<w:commentRangeEnd>`, `<w:commentReference>`
+    markers from `document.xml`.
 
-16. **No oversized white space above the title on page 1.** The cover-page title
-    (*DES-030 INSTRUCTIONS DE DÉPLOIEMENT*) must sit close to the top of page 1 —
-    just below the header band, not pushed two-thirds down the page. Remove any
-    empty paragraphs or large `<w:spacing w:before>` blocks that the template uses
-    to vertically center the title.
+17. **Strip the "Template Version:" footer line** in `footer3.xml`. Keep the
+    Copyright line.
 
-17. **Body and tables align flush-left to the page margin.** All running text,
-    headings, table-of-contents lines, and tables align to the **left page margin** —
-    not centered, not indented from the section heading. The only exception is the
-    title block on page 1, which stays centered.
-    - The *Table des matières* (TOC) lines must sit at the same left edge as the
-      "1.1 Suivi des versions" heading directly below them.
-    - The *Suivi des versions* and *Extensions développées* tables, and every other
-      content table, share the same left starting position as the surrounding
-      paragraph text.
+### Phase 2 — Structural trimming
 
-18. **Bullet and numbered lists keep a small indent.** Unordered (`•`) and ordered
-    (`1.`, `2.`, …) list items remain slightly indented from the body left edge
-    (the standard hanging indent the reference template uses — usually 720 DXA
-    left / 360 hanging). Do **not** strip the indent so they sit flush-left like
-    body paragraphs; lists must visually read as lists.
+18. **Section 1 *Suivi des versions* table = 1 data row** by default (header +
+    today's row only). Strip extra history rows the template carries.
 
-19. **Section 1 *Suivi des versions* table contains exactly ONE data row by default.**
-    On initial generation the table has one row: `Date = today`, `Auteur = author from
-    DES-020`, `Version = 1.0`, `Changement de référence = "Document création"`.
-    Strip any extra rows the template carries (e.g. 1.1, 1.2 history rows).
-    Additional rows are added only when the user makes subsequent versions.
+19. **KEEP Section 2 subsections (2.1 Objective + 2.2 Prerequisites). Trim
+    their bullet lists to only the component types being deployed.** Do NOT
+    delete these sections — the Introduction paragraphs are required content.
+    Inside both 2.1 and 2.2, the template carries bullet lists enumerating
+    every possible Infor component type (Dynamic table, Mashup, IEC Mapping,
+    Workflow, H5 Script, Event Analytic Rules, ION Script, etc.). Remove every
+    bullet whose component type is **not** present in the user-confirmed
+    deliverables. For LstCutOff (single XtendM3 Transaction), 2.1 keeps only
+    the `Xtend M3` bullet, and 2.2 keeps only the `Xtend M3` bullet — drop
+    `M3` and `ION` since the table's intent is *components to deploy*, not
+    *generic infrastructure*.
 
-20. **All Section 1 dates equal today** by default.
-    - `Date de création du document` = today.
-    - `Dernière mise à jour` = today (same as creation date on initial generation).
-    - The unique row in the *Suivi des versions* table = today.
-    Never carry over template dates (e.g. `21/11/25`) into a freshly generated doc.
+20. **Spelling: `Dependances` → `Dependencies`** in the section 2.2 heading
+    and anywhere else the template carries the typo. Apply via the
+    `TextReplace` helper so only `<w:t>` content is affected.
 
-21. **Two distinct "reference" fields — do not confuse them.**
-    - **`Référence du document`** (in the Section 1 *Propriétés du document* table) =
-      the **exact filename of the input DES-020 `.docx`** including extension,
-      e.g. `DES020_Lst_CutOff_OrchestrationDesCommandes.docx`.
-    - **`File Ref`** (in the page header / footer band) = the **exact filename of
-      this DES-030 output `.docx`** including the version suffix and `.docx`
-      extension, e.g. `DES-030_LstCutOff_M3_OrchestrationDesCommandes_V1_0.docx`.
-      Replace any template-supplied shortened label such as "DES030 LstCutOff"
-      with this full filename — never drop the `V1_0` or the `.docx` extension.
+21. **Section 3.1 *Deliverable interface* table — keep only rows for component
+    types present in the confirmed deliverables.** Delete all template rows
+    whose `Type` does not match one of the user-confirmed deliverable types.
+    For LstCutOff (single XtendM3 Transaction), keep ONLY the `Xtend M3
+    Transaction` row. The `Name` column value should match the WRICEF
+    component name (e.g. `TRANSACTION-EXT340MI-LstCutOff`), not the template's
+    leftover `AddLine-ALL`.
 
-22. **All content tables share the same styling as the *Suivi des versions* table.**
-    The *Extensions développées*, *Validations*, approval, and any other tables
-    inserted in the document use the same banded header row, same border palette,
-    same column-padding, same Arial 22 half-points body text. Do not let the
-    template carry over a divergent table style (e.g. different header fill, no
-    borders, mismatched cell padding) for any of these tables.
+22. **Delete unused Section 4 subsections.** For a given deliverable set, keep
+    only the Section 4 subsections that correspond to the deliverable types.
+    Cut from the first to-delete H2 heading to the start of the final
+    `<w:sectPr>` (or `</w:body>` if no mid-doc sectPr). For LstCutOff
+    (Class B XtendM3 only), keep `4.1 Transaction XtendM3` and delete
+    4.2 onwards entirely.
 
-23. **No strikethrough (`<w:strike/>`) anywhere in the generated document.** Strip
-    every `<w:strike/>` and `<w:dstrike/>` element from `word/document.xml`,
-    `header*.xml`, and `footer*.xml`. Strikethrough text only appears as an
-    artefact of the source template's history — it is never part of a clean
-    DES-030 deliverable.
+23. **Mark the TOC field dirty so Word refreshes it on open.** After deleting
+    sections, the TOC's cached visible content still lists the deleted entries.
+    Inject `w:dirty="true"` on the TOC field's opening `<w:fldChar
+    w:fldCharType="begin"/>`. Word auto-refreshes on the first open (or
+    prompts the user to update fields), so the TOC matches the new section
+    list without manual intervention.
 
-24. **No Word comments in the generated document.** Strip every comment from the
-    output:
-    - Remove all `<w:commentRangeStart>`, `<w:commentRangeEnd>`, and
-      `<w:commentReference>` elements from `word/document.xml`.
-    - Delete `word/comments.xml`, `word/commentsExtended.xml`, `word/commentsIds.xml`,
-      `word/commentsExtensible.xml`, and `word/people.xml` from the unzipped output.
-    - Remove the corresponding `<Relationship>` entries from
-      `word/_rels/document.xml.rels` and the matching `<Override>` entries from
-      `[Content_Types].xml`. A generated DES-030 ships clean — no margin-side
-      comment threads carried over from the template.
+24. **Canonical order of remaining Section 4 subsections** (when more than one
+    type is present): XtendM3 Transaction → XtendM3 Dynamic Table →
+    Custom BOD / Custom List / Agreement → Object Schema → Schema Extension →
+    Script → ION Mapping → Workflow → Document Flow / Dataflow → Monitor →
+    MEC Mapper.
 
-25. **Canonical order of deliverable rows in Section 4 (*Objets Livrables et
-    Extensions*).** When the confirmed deliverables table contains multiple
-    component types, render them in the DES-030 in this exact order:
+### Phase 2 — Visual styling
 
-    1. **XtendM3 Transaction / Extension** (`.json`, `.groovy`, `.java`)
-    2. **Custom BOD / Custom List / Agreement** (`.zap`)
-    3. **Object Schema** (`.zip`) — including `Object Schema (Notification)` variants
-    4. **Schema Extension** (`.zip`)
-    5. **Script** (`.sql`, `.js`, custom)
-    6. **ION Mapping** (`.xml`)
-    7. **Workflow** (`.xml`)
-    8. **Document Flow / Dataflow** (`.xml`)
-    9. **Monitor** (`.xml`)
-    10. **MEC Mapper** (`.lson`, `.xml`) — last
+25. **Red border around image-only paragraphs, NEVER around mixed-content
+    paragraphs.** Mark template screenshots that need replacement with a thick
+    red border (`<w:pBdr>` size 24 half-points, color `C00000`). Apply the
+    border **only** to paragraphs that contain `<w:drawing>` AND have NO
+    visible text. For mixed paragraphs (list-item text + inline image), **split**
+    them — move the image run into its own new paragraph (preserving indent,
+    stripping the parent's `<w:numPr>` so the new paragraph isn't part of the
+    numbered list), then border the new image-only paragraph.
 
-    Within a type that has multiple files (e.g. two Object Schemas), group all files
-    under a single row per rule 11 — the type appears once, with its multiple files
-    listed in the `Fichier` cell. The canonical-order rule applies to the set of
-    types present in the actual deliverables; types absent from the project are
-    simply skipped without leaving an empty placeholder row.
+26. **Image paragraphs inherit the list parent's left indent** so screenshots
+    sit visually under the list item they document.
 
-26. **Re-zip output with `System.IO.Compression.ZipFile`, not `Compress-Archive`.**
-    PowerShell's `Compress-Archive` cmdlet produces ZIP archives that Word 2016+ may
-    reject as malformed (the resulting `.docx` opens with *"Word experienced an error
-    trying to open the file"*). Always re-zip with .NET's `ZipFile.CreateFromDirectory`:
-    ```powershell
-    Add-Type -AssemblyName System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::CreateFromDirectory($unpackedDir, $outZip)
-    ```
-    This produces a standards-compliant ZIP that Word reliably opens.
+27. **Collapse runs of ≥ 2 empty paragraphs to 1.** Substring substitutions that
+    emptied template text leave gaps; flatten them iteratively until stable.
 
-27. **Wrap every embedded image with a thick red border in the generated document.**
-    Reference templates carry over screenshots from a different WRICEF that almost
-    certainly need to be replaced. Apply a `<wp:effectExtent>` / drawing border around
-    every `<w:drawing>` element so the user visually identifies which screenshots to
-    swap out. Use the same red `C00000` color + `size: 24` half-points used by rule 10
-    for screenshot placeholders. The user can manually remove the border from generic
-    UI screenshots (e.g. "click the Import button") that don't show component names —
-    but the default for the generator is **border everything**.
+28. **No oversized white space above the cover-page title.** The title sits
+    just below the header band, not pushed toward mid-page.
 
-28. **Strip the `Date Maj` column value and every other "last modified" template date
-    in Section 4 (*Objets Livrables et Extensions*) → today's date.** The
-    *Extension Object name / Date Maj* table inherits a stale template date such as
-    `21/11/25` in its `Date Maj` cell; replace it with today during generation.
+29. **Body and tables flush-left to the page margin.** Title block is the only
+    centered element. TOC entries align to the same left edge as the heading
+    they target.
 
-29. **No duplicate filenames inside a single cell.** When the template carries a
-    deliverable name twice in the same `<w:tc>` (typically the original line +
-    a strikethrough "previous" version), keep only **one** entry — the latest /
-    non-strikethrough one. This applies both in the *Extensions développées* table
-    AND in the Section 5 step list ("Localisez le fichier xtendM3" instruction).
+30. **Bullets and numbered lists keep a small hanging indent** (720 DXA left /
+    360 hanging). Do not flatten them to body level.
 
-30. **Collapse blank paragraphs left over from removed template text.** After
-    substring replacements that emptied template text (e.g. "RFO 5294" → ""),
-    consecutive empty `<w:p>` elements remain and create awkward vertical gaps.
-    Reduce any run of ≥ 2 empty paragraphs in a row to a single empty paragraph.
-    In particular, **the screenshot / image immediately following an instruction
-    sentence must sit directly below the text — no empty paragraph between them.**
+### Phase 2 — Project conventions
 
-31. **Remove the boilerplate "Template Version:" footer line.** The reference
-    template embeds a third footer line in `footer3.xml` reading
-    `Copyright © 2013 Infor … Template Version:`. The "Template Version:" run
-    (along with any trailing version stub) is template-tracking debris and must
-    be stripped from the generated DES-030. The Copyright line is fine to keep.
+31. **No Python.** Hard constraint.
 
-32. **Date orphan-run cleanup must handle every split variant.** When a template
-    date is split across runs (`21` + `/11/25`, or `21` + `/11` + `/25`, or
-    `21/11` + `/25`, etc.), substituting only one fragment leaves the rest behind
-    as a visible artefact (e.g. `28/05/26/11`). The cleanup pass must scrub every
-    standalone date-fragment run — `/11`, `/25`, `/11/25`, `11`, `21`, `/` — when
-    it appears immediately after the new date in the same cell.
+32. **`01_Reference_Examples/` is read-only ground truth.** Never edit files
+    there.
 
-14. **Auto-update Table of Contents.** Insert a TOC immediately after the title block
-    (using `new TableOfContents("Sommaire", { hyperlink: true, headingStyleRange: "1-3" })`)
-    and after generation, ensure all H1 / H2 / H3 outline levels are set so Word will
-    populate it on first open. The user will press `F9` once in Word to refresh page
-    numbers; the skill is responsible for producing a TOC that refreshes cleanly with
-    no broken hyperlinks.
+33. **Body text in French**, formal/imperative tone (*"Importer le fichier…"*,
+    *"Vérifier la présence de…"*). Section 1 control table keys (Author, Date,
+    Version, etc.) may be English. Section 4 column headers (Type, Name, File,
+    Status) may be English.
+
+34. **Headings: bold, H1 in UPPERCASE, no decorative color** (black /
+    `auto`). H1 + H2 carry a thin light-grey top rule (`ACACAC`, sz 12–24).
+    Title block 48 half-points (24pt). Body Arial 22 half-points (11pt).
+    The only red ink is the placeholder text (rule 35) and screenshot
+    borders (rule 25).
+
+35. **Red `[À COMPLÉTER — <hint>]` placeholders for uncertain values** —
+    reviewer/approver names, missing version digits, fields the source DES-020
+    does not specify. Format: `<w:r><w:rPr><w:b/><w:color w:val="C00000"/></w:rPr><w:t>[À COMPLÉTER — <hint>]</w:t></w:r>`.
+
+36. **No duplicate filenames inside a single cell** or in consecutive list
+    paragraphs. Dedup via substring match on the unique part (e.g. `LstCutOff`)
+    since template-split runs make full-filename matching unreliable.
+
+37. **Emergency Contextual Deduction (non-interactive bypass only).** If the
+    user has explicitly forced an automated, non-interactive run
+    (*"sans confirmation"*, *"skip prompts"*), skip Rule 2's wait. Deduce
+    deliverable extensions from DES-020 technical patterns and mark each row
+    `[Déduit du DES-020 — à confirmer]` in Section 4.
 
 ---
 
 ## Where to go next
 
 - **To execute** — open `./workflow/workflow.md` and run Steps 0–8.
-- **For project background** (who the user is, folder layout, glossary, naming conventions)
-  — open `./CLAUDE.md`.
-- **For `.docx` generation patterns** (page size, headers, tables, lists, images) — open
-  `.claude/skills/docx/SKILL.md`.
+- **For project background** — open `./CLAUDE.md`.
+- **For `.docx` cookbook patterns** — open `.claude/skills/docx/SKILL.md`.
