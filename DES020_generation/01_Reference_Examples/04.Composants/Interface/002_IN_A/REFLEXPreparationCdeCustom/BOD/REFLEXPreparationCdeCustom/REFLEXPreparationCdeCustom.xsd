@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="REFLEXPreparationCdeCustom">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="1" minOccurs="1" name="MsgId" type="xs:string" />
+                <xs:element maxOccurs="unbounded" minOccurs="1" name="Data">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element maxOccurs="1" minOccurs="1" name="PreparationEnTete">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Rubrique110" maxOccurs="1" minOccurs="1">
+                                            <xs:complexType>
+                                                <xs:sequence>
+                                                    <xs:element name="Data" maxOccurs="1" minOccurs="1">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="CodeActivite" minOccurs="0" maxOccurs="1">
+                                                                    <xs:simpleType>
+                                                                        <xs:restriction base="xs:string">
+                                                                            <xs:minLength value="0"/>
+                                                                            <xs:maxLength value="3"/>
+                                                                        </xs:restriction>
+                                                                    </xs:simpleType>
+                                                                </xs:element>
+                                                                <xs:element name="CodeDepotPhysique" minOccurs="0" maxOccurs="1">
+                                                                    <xs:simpleType>
+                                                                        <xs:restriction base="xs:string">
+                                                                            <xs:minLength value="0"/>
+                                                                            <xs:maxLength value="3"/>
+                                                                        </xs:restriction>
+                                                                    </xs:simpleType>
+                                                                </xs:element>
+                                                                <xs:element name="NumeroDePreparation" minOccurs="0" maxOccurs="1">
+                                                                    <xs:simpleType>
+                                                                        <xs:restriction base="xs:string">
+                                                                            <xs:minLength value="0"/>
+                                                                            <xs:maxLength value="9"/>
+                                                                        </xs:restriction>
+                                                                    </xs:simpleType>
+                                                                </xs:element>
+                                                                <xs:element name="CodeTypePreparation" minOccurs="0" maxOccurs="1">
+                                                                    <xs:simpleType>
+                                                                        <xs:restriction base="xs:string">
+                                                                            <xs:minLength value="0"/>
+                                                                            <xs:maxLength value="3"/>
+                                                                        </xs:restriction>
+                                                                    </xs:simpleType>
+                                                                </xs:element>
+                                                                <xs:element name="CodeDestinatairePreparation" minOccurs="0" maxOccurs="1">
+                                                                    <xs:simpleType>
+                                                                        <xs:restriction base="xs:string">
+                                                                            <xs:minLength value="0"/>
+                                                                            <xs:maxLength value="10"/>
+                                                                        </xs:restriction>
+                                                                    </xs:simpleType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element maxOccurs="1" minOccurs="1" name="Rubrique160">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Data" maxOccurs="1" minOccurs="1">
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>
+                                                                            <xs:element name="DateSortieStock" minOccurs="0" maxOccurs="1">
+                                                                                <xs:simpleType>
+                                                                                    <xs:restriction base="xs:integer">
+                                                                                        <xs:totalDigits value="8"/>
+                                                                                    </xs:restriction>
+                                                                                </xs:simpleType>
+                                                                            </xs:element>
+                                                                            <xs:element name="HeureSortieStock" minOccurs="0" maxOccurs="1">
+                                                                                <xs:simpleType>
+                                                                                    <xs:restriction base="xs:integer">
+                                                                                        <xs:totalDigits value="6"/>
+                                                                                    </xs:restriction>
+                                                                                </xs:simpleType>
+                                                                            </xs:element>                                                                       
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element maxOccurs="unbounded" minOccurs="1" name="Rubrique199">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Data" maxOccurs="1" minOccurs="1">
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>                                                               
+                                                                            <xs:element name="Commentaire" minOccurs="0" maxOccurs="1">
+                                                                                <xs:simpleType>
+                                                                                    <xs:restriction base="xs:string">
+                                                                                        <xs:minLength value="0"/>
+                                                                                        <xs:maxLength value="10"/>
+                                                                                    </xs:restriction>
+                                                                                </xs:simpleType>
+                                                                            </xs:element>
+                                                                            <xs:element name="FamilleCommentaire" minOccurs="0" maxOccurs="1">
+                                                                                <xs:simpleType>
+                                                                                    <xs:restriction base="xs:string">
+                                                                                        <xs:minLength value="0"/>
+                                                                                        <xs:maxLength value="3"/>
+                                                                                    </xs:restriction>
+                                                                                </xs:simpleType>
+                                                                            </xs:element>
+                                                                        </xs:sequence>
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                    <xs:element maxOccurs="1" minOccurs="1" name="PreparationLigne">
+                                                        <xs:complexType>
+                                                            <xs:sequence>
+                                                                <xs:element name="Rubrique210" maxOccurs="unbounded" minOccurs="1">
+                                                                    <xs:complexType>
+                                                                        <xs:sequence>
+                                                                            <xs:element name="NumeroSequence" minOccurs="1" maxOccurs="1">
+                                                                                <xs:simpleType>
+                                                                                    <xs:restriction base="xs:string">
+                                                                                        <xs:minLength value="0"/>
+                                                                                        <xs:maxLength value="7"/>
+                                                                                    </xs:restriction>
+                                                                                </xs:simpleType>
+                                                                            </xs:element>
+                                                                            <xs:element name="Data" maxOccurs="1" minOccurs="1">
+                                                                                <xs:complexType>
+                                                                                    <xs:sequence>
+                                                                                        <xs:element name="CodeArticle" minOccurs="0" maxOccurs="1">
+                                                                                            <xs:simpleType>
+                                                                                                <xs:restriction base="xs:string">
+                                                                                                    <xs:minLength value="0"/>
+                                                                                                    <xs:maxLength value="15"/>
+                                                                                                </xs:restriction>
+                                                                                            </xs:simpleType>
+                                                                                        </xs:element>
+                                                                                        <xs:element name="CodeQualite" minOccurs="0" maxOccurs="1">
+                                                                                            <xs:simpleType>
+                                                                                                <xs:restriction base="xs:string">
+                                                                                                    <xs:minLength value="0"/>
+                                                                                                    <xs:maxLength value="3"/>
+                                                                                                </xs:restriction>
+                                                                                            </xs:simpleType>
+                                                                                        </xs:element>
+                                                                                        <xs:element name="ReferenceDonneurOrdre" minOccurs="0" maxOccurs="1">
+                                                                                            <xs:simpleType>
+                                                                                                <xs:restriction base="xs:string">
+                                                                                                    <xs:minLength value="0"/>
+                                                                                                    <xs:maxLength value="20"/>
+                                                                                                </xs:restriction>
+                                                                                            </xs:simpleType>
+                                                                                        </xs:element>
+                                                                                        <xs:element name="NumeroLigneReferenceDonneurOrdre" minOccurs="0" maxOccurs="1">
+                                                                                            <xs:simpleType>
+                                                                                                <xs:restriction base="xs:string">
+                                                                                                    <xs:minLength value="0"/>
+                                                                                                    <xs:maxLength value="13"/>
+                                                                                                </xs:restriction>
+                                                                                            </xs:simpleType>
+                                                                                        </xs:element>
+                                                                                    </xs:sequence>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                            <xs:element maxOccurs="unbounded" minOccurs="1" name="Rubrique250">
+                                                                                <xs:complexType>
+                                                                                    <xs:sequence>
+                                                                                        <xs:element name="Data" maxOccurs="1" minOccurs="1">
+                                                                                            <xs:complexType>
+                                                                                                <xs:sequence>
+                                                                                                    <xs:element name="QuantiteVLDeBase" minOccurs="0" maxOccurs="1">
+                                                                                                        <xs:simpleType>
+                                                                                                            <xs:restriction base="xs:integer">
+                                                                                                                <xs:totalDigits value="17"/>
+                                                                                                            </xs:restriction>
+                                                                                                        </xs:simpleType>
+                                                                                                    </xs:element>
+                                                                                                    <xs:element name="NumeroSupport" minOccurs="0" maxOccurs="1">
+                                                                                                        <xs:simpleType>
+                                                                                                            <xs:restriction base="xs:string">
+                                                                                                                <xs:minLength value="0"/>
+                                                                                                                <xs:maxLength value="20"/>
+                                                                                                            </xs:restriction>
+                                                                                                        </xs:simpleType>
+                                                                                                    </xs:element>
+                                                                                                    <xs:element name="Lot1" minOccurs="0" maxOccurs="1">
+                                                                                                        <xs:simpleType>
+                                                                                                            <xs:restriction base="xs:string">
+                                                                                                                <xs:minLength value="0"/>
+                                                                                                                <xs:maxLength value="20"/>
+                                                                                                            </xs:restriction>
+                                                                                                        </xs:simpleType>
+                                                                                                    </xs:element>
+                                                                                                    <xs:element name="CodeTypeSupport" minOccurs="0" maxOccurs="1">
+                                                                                                        <xs:simpleType>
+                                                                                                            <xs:restriction base="xs:string">
+                                                                                                                <xs:minLength value="0"/>
+                                                                                                                <xs:maxLength value="6"/>
+                                                                                                            </xs:restriction>
+                                                                                                        </xs:simpleType>
+                                                                                                    </xs:element>
+                                                                                                </xs:sequence>
+                                                                                            </xs:complexType>
+                                                                                        </xs:element>
+                                                                                    </xs:sequence>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                            <xs:element maxOccurs="unbounded" minOccurs="1" name="Rubrique410">
+                                                                                <xs:complexType>
+                                                                                    <xs:sequence>
+                                                                                        <xs:element name="Data" maxOccurs="1" minOccurs="1">
+                                                                                            <xs:complexType>
+                                                                                                <xs:sequence>                                                                                               
+                                                                                                    <xs:element name="PoidsBrutSupport" minOccurs="0" maxOccurs="1">
+                                                                                                        <xs:simpleType>
+                                                                                                            <xs:restriction base="xs:string">
+                                                                                                                <xs:minLength value="0"/>
+                                                                                                                <xs:maxLength value="17"/>
+                                                                                                            </xs:restriction>
+                                                                                                        </xs:simpleType>
+                                                                                                    </xs:element>
+                                                                                                </xs:sequence>
+                                                                                            </xs:complexType>
+                                                                                        </xs:element>
+                                                                                    </xs:sequence>
+                                                                                </xs:complexType>
+                                                                            </xs:element>
+                                                                        </xs:sequence>                                                                      
+                                                                    </xs:complexType>
+                                                                </xs:element>
+                                                            </xs:sequence>
+                                                        </xs:complexType>
+                                                    </xs:element>
+                                                </xs:sequence>                                             
+                                            </xs:complexType>
+                                        </xs:element>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Results" maxOccurs="1" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="errorCount" maxOccurs="1" minOccurs="0" type="xs:string" />
+                                        <xs:element name="error" maxOccurs="1" minOccurs="0" type="xs:string" />
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="ResultsCount" maxOccurs="1" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="errorCount" maxOccurs="1" minOccurs="0" type="xs:string" />
+                            <xs:element name="successCount" maxOccurs="1" minOccurs="0" type="xs:string" />
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

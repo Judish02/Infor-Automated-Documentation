@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><ns2:NounMetadata xmlns:ns2="http://schema.infor.com/InforOAGIS/2"><Noun><NounName>REFLEXPreparationCdeCustom</NounName><IDXPath>/*/DataArea/REFLEXPreparationCdeCustom/MsgId</IDXPath><SupportedVerbs><SupportedVerb>Acknowledge</SupportedVerb><SupportedVerb>Process</SupportedVerb></SupportedVerbs></Noun></ns2:NounMetadata>
